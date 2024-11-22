@@ -32,8 +32,20 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
 
+	// fast api
+	//implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// dns for mac
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.96.Final'
+	runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.96.Final'
+
+}
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootRun {
+	jvmArgs = ['-Dio.netty.dns.native.disabled=true']
 }
