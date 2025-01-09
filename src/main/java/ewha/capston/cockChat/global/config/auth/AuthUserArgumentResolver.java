@@ -1,7 +1,8 @@
-package ewha.capston.cockChat.global.config;
+package ewha.capston.cockChat.global.config.auth;
 
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.service.JwtTokenProvider;
+import ewha.capston.cockChat.global.config.auth.AuthUser;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;

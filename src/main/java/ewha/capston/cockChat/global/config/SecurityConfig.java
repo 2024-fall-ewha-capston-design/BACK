@@ -1,6 +1,7 @@
 package ewha.capston.cockChat.global.config;
 
 import ewha.capston.cockChat.domain.member.service.JwtTokenProvider;
+import ewha.capston.cockChat.global.config.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
