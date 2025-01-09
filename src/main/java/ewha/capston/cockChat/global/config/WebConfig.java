@@ -1,5 +1,6 @@
 package ewha.capston.cockChat.global.config;
 
+import ewha.capston.cockChat.global.config.auth.AuthUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

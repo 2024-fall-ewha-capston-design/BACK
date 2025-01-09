@@ -2,6 +2,7 @@ package ewha.capston.cockChat.domain.chat.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,8 +31,14 @@ public class ChatRoom {
     @Column(nullable = false)
     private Boolean nicknameType;
 
-
-
+    @Builder
+    public ChatRoom(String identifier, Boolean roomType, Long password, String roomName, Boolean nicknameType){
+        this.identifier = identifier;
+        this.roomType = roomType;
+        this.password = password;
+        this.roomName = roomName;
+        this.nicknameType = nicknameType;
+    }
 
 
 

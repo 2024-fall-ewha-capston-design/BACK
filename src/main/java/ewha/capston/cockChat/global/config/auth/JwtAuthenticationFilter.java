@@ -1,4 +1,4 @@
-package ewha.capston.cockChat.global.config;
+package ewha.capston.cockChat.global.config.auth;
 
 import ewha.capston.cockChat.domain.member.service.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
