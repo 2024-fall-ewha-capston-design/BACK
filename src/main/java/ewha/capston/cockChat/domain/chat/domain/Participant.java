@@ -4,6 +4,7 @@ import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +36,15 @@ public class Participant {
 
     @Column
     private String roomNickname;
+
+
+    @Builder
+    public Participant(ChatRoom chatRoom, Member member, Boolean role, String roomNickname){
+        this.chatRoom = chatRoom;
+        this.member = member;
+        this.role = role;
+        this.roomNickname = roomNickname;
+    }
 
 
 }
