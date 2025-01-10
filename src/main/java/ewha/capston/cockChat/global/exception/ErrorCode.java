@@ -17,6 +17,12 @@ public enum ErrorCode {
     NON_LOGIN(HttpStatus.BAD_REQUEST,"로그인이 필요합니다." ),
     INVALID_MEMBER(HttpStatus.BAD_REQUEST,"접근 권한이 없는 회원입니다."),
     ALREADY_EXIST_NICKNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
+
+    /* chat room*/
+    INVALID_ROOM(HttpStatus.BAD_REQUEST, "존재하지 않는 채팅방입니다."),
+
+    /* participant */
+    INVALID_PARTICIPANT(HttpStatus.BAD_REQUEST,"잘못된 채팅 참여자입니다.")
     ;
 
     private final HttpStatus status;

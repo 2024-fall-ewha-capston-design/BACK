@@ -2,10 +2,12 @@ package ewha.capston.cockChat.domain.chat.domain;
 
 import ewha.capston.cockChat.global.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
+@Getter
 @Document(collection = "chats")
 public class Chat {
     @Id
@@ -19,11 +21,12 @@ public class Chat {
 
     private String message;
 
-    private Boolean chatType;
+    private MessageType messageType;
 
-    public Chat(Long chatroomId, Long participantId, String message, Boolean chatType){
+    @Builder
+    public Chat(Long chatroomId, Long participantId, String message, MessageType chatType){
         this.chatroomId = chatroomId;
-        this.chatType = chatType;
+        this.messageType = chatType;
         this.message = message;
         this.participantId = participantId;
     }
