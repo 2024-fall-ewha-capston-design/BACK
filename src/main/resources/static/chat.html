@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <style>
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
+<button id="sendButton">전송</button>
+
+<div id="messages"></div>
+
+<script>
+    const socket = new SockJS('http://localhost:8080/ws-chat'); // WebSocket 연결 경로
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        // 1번 방에 대한 구독 경로
+        stompClient.subscribe('/topic/public/1', function (message) { // 1번 방만 구독
+            const receivedMessage = JSON.parse(message.body); // 메시지 파싱
+            displayMessage(receivedMessage.content); // 화면에 메시지 표시
+        });
+
+        // Send message on button click
+        document.getElementById('sendButton').addEventListener('click', function () {
+            const contents = document.getElementById('messageInput').value;
+            const message = {
+                roomId: 1, // 항상 1번 방
+                type: "CHAT", // 메시지 타입 (CHAT)
+                senderId: 1, // 보낸 사람 ID (예시로 1)
+                content: contents // 입력한 메시지 내용
+            };
+
+            // 서버로 메시지 전송
+            stompClient.send("/app/chat/send", {}, JSON.stringify(message));
+            document.getElementById('messageInput').value = ''; // 메시지 전송 후 입력창 비우기
+        });
+    });
+
+    // 화면에 메시지를 추가하는 함수
+    function displayMessage(message) {
+        const messagesDiv = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message; // 메시지 내용 설정
+        messagesDiv.appendChild(messageElement); // 메시지 추가
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 스크롤을 맨 아래로
+    }
+</script>
+</body>
+</html>
+
