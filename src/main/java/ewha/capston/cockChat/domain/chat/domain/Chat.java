@@ -4,10 +4,12 @@ import ewha.capston.cockChat.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
+@NoArgsConstructor
 @Document(collection = "chats")
 public class Chat {
     @Id

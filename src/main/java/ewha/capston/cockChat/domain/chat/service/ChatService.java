@@ -88,11 +88,6 @@ public class ChatService {
         Participant sender = participantRepository.findById(requestDto.getSenderId())
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
 
-        System.out.println("Sender ID: " + requestDto.getSenderId());
-        System.out.println("Message Type: " + requestDto.getType());
-        System.out.println("Message Content: " + requestDto.getContent());
-
-
         /* 채팅 mongoDB 저장 */
         Chat chat = mongoChatRepository.save(Chat.builder()
                 .chatroomId(roomId)
@@ -101,7 +96,7 @@ public class ChatService {
                 .chatType(requestDto.getType())
                 .build()
         );
-        
+
         /* 메시지 송신 */
         messagingTemplate.convertAndSend("/topic/public/" + roomId, chat);
     }
