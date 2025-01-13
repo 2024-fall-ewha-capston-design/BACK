@@ -21,6 +21,9 @@ public enum ErrorCode {
     /* chat room*/
     INVALID_ROOM(HttpStatus.BAD_REQUEST, "존재하지 않는 채팅방입니다."),
 
+    /* chat */
+    INVALID_MESSAGE_CONTENT(HttpStatus.BAD_REQUEST, "메시지 내용으로 공백이 들어왔습니다."),
+
     /* participant */
     INVALID_PARTICIPANT(HttpStatus.BAD_REQUEST,"잘못된 채팅 참여자입니다.")
     ;

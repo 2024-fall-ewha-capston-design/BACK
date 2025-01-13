@@ -14,7 +14,6 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic"); // 클라이언트가 구독할 수 있는 prefix

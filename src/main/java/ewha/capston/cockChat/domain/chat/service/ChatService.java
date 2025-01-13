@@ -80,6 +80,9 @@ public class ChatService {
     /* 메시지 보내기 */
     public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) {
 
+        /* 채팅 내용으로 공백이 들어온 경우, 예외 발생 */
+        if(requestDto.getContent().isBlank()) throw new CustomException(ErrorCode.INVALID_MESSAGE_CONTENT);
+
         /* roomId 검증 */
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
