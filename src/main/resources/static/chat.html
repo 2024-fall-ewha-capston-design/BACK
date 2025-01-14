@@ -29,10 +29,12 @@
         console.log('Connected: ' + frame);
 
         // 1번 방에 대한 구독 경로
-        stompClient.subscribe('/topic/public/1', function (message) { // 1번 방만 구독
-            const receivedMessage = JSON.parse(message.body); // 메시지 파싱
-            displayMessage(receivedMessage.content); // 화면에 메시지 표시
+        stompClient.subscribe('/topic/public/1', function (message) {
+        console.log("Received message:", JSON.parse(message.body));
+        const receivedMessage = JSON.parse(message.body);
+        displayMessage(receivedMessage.message);
         });
+
 
         // Send message on button click
         document.getElementById('sendButton').addEventListener('click', function () {

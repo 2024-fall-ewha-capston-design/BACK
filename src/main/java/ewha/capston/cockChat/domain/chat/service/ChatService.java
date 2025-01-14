@@ -80,6 +80,9 @@ public class ChatService {
     /* 메시지 보내기 */
     public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) {
 
+        /* 채팅 내용으로 공백이 들어온 경우, 예외 발생 */
+        if(requestDto.getContent().isBlank()) throw new CustomException(ErrorCode.INVALID_MESSAGE_CONTENT);
+
         /* roomId 검증 */
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
@@ -87,11 +90,6 @@ public class ChatService {
         /* participantId 검증 */
         Participant sender = participantRepository.findById(requestDto.getSenderId())
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
-
-        System.out.println("Sender ID: " + requestDto.getSenderId());
-        System.out.println("Message Type: " + requestDto.getType());
-        System.out.println("Message Content: " + requestDto.getContent());
-
 
         /* 채팅 mongoDB 저장 */
         Chat chat = mongoChatRepository.save(Chat.builder()
@@ -101,7 +99,7 @@ public class ChatService {
                 .chatType(requestDto.getType())
                 .build()
         );
-        
+
         /* 메시지 송신 */
         messagingTemplate.convertAndSend("/topic/public/" + roomId, chat);
     }

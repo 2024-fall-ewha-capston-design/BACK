@@ -22,9 +22,7 @@ public class ChatController {
     //@MessageMapping("/app/chat/send")
     @MessageMapping("/chat/send")
     public void sendMessage(@Payload  ChatMessageRequestDto requestDto){
-
-        // 로그
-        System.out.println("Received message: " + requestDto); // 로그 추가
+        log.info("Received message request: {}", requestDto);
         chatService.sendMessage(requestDto.getRoomId(), requestDto);
     }
 }
