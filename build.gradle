@@ -68,3 +68,7 @@ tasks.named('test') {
 bootRun {
 	jvmArgs = ['-Dio.netty.dns.native.disabled=true']
 }
+
+jar {
+	enabled = false
+}
