@@ -44,7 +44,7 @@ dependencies {
 
 	//Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'io.lettuce.core:lettuce-core:6.3.2'
+	implementation 'io.lettuce:lettuce-core:6.5.3.RELEASE'
 
 	// fast api
 	//implementation 'org.springframework.boot:spring-boot-starter-web'
