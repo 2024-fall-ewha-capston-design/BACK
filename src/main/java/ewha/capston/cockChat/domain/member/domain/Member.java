@@ -27,4 +27,14 @@ public class Member {
         this.email = email;
         this.nickname = nickname;
     }
+
+    /* 닉네임 수정 */
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    /* 프로필 수정 */
+    public void updateProfileImgUrl(String profileImgUrl){
+        this.profileImgUrl = profileImgUrl;
+    }
 }
