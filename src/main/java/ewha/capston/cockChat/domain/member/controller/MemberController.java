@@ -7,6 +7,7 @@ import ewha.capston.cockChat.domain.member.service.AuthService;
 import ewha.capston.cockChat.domain.member.service.MemberService;
 import ewha.capston.cockChat.domain.member.dto.request.LoginRequestDto;
 import ewha.capston.cockChat.domain.member.dto.response.LoginResponseDto;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +31,18 @@ public class MemberController {
         return responseDto;
     }
 
+    /* 프로필 업데이트 */
     @PutMapping("/members/profile")
     public ResponseEntity<MemberResponseDto> updateMember(@RequestBody MemberUpdateRequestDto requestDto){
-
-        Member member = new Member("test@email.com","testName");
+        Member member = new Member("test@email.com","testName"); // 수정
         return memberService.updateMember(member,requestDto);
+    }
+
+    /* 프로필 조회 */
+    @GetMapping("/members/my")
+    public ResponseEntity<MemberResponseDto> getMemberProfile(){
+        Member member = new Member("test@email.com","testName"); // 수정
+        return memberService.getMemberProfile(member);
     }
 
 

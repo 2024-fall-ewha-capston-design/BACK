@@ -72,4 +72,10 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MemberResponseDto.of(member));
     }
+
+    /* 회원 프로필 조회 */
+    public ResponseEntity<MemberResponseDto> getMemberProfile(Member member) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MemberResponseDto.of(member));
+    }
 }
