@@ -1,15 +1,16 @@
 package ewha.capston.cockChat.domain.member.controller;
 
+import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.member.dto.request.MemberUpdateRequestDto;
+import ewha.capston.cockChat.domain.member.dto.response.MemberResponseDto;
 import ewha.capston.cockChat.domain.member.service.AuthService;
 import ewha.capston.cockChat.domain.member.service.MemberService;
 import ewha.capston.cockChat.domain.member.dto.request.LoginRequestDto;
 import ewha.capston.cockChat.domain.member.dto.response.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -27,6 +28,13 @@ public class MemberController {
     public LoginResponseDto login(@RequestBody LoginRequestDto requestDto) throws IOException {
         LoginResponseDto responseDto = authService.googleLogin(requestDto.getCode());
         return responseDto;
+    }
+
+    @PutMapping("/members/profile")
+    public ResponseEntity<MemberResponseDto> updateMember(@RequestBody MemberUpdateRequestDto requestDto){
+
+        Member member = new Member("test@email.com","testName");
+        return memberService.updateMember(member,requestDto);
     }
 
 
