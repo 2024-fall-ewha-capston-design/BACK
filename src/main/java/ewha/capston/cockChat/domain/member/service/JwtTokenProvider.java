@@ -69,10 +69,19 @@ public class JwtTokenProvider {
             Member member = memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.NO_MEMBER_EXIST));
             return new UsernamePasswordAuthenticationToken(member, "");
         }catch (ExpiredJwtException e) {
+            log.info(ErrorCode.INVALID_TOKEN.getMessage());
+            log.info("받은 토큰: " + token);
+
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         } catch (JwtException e) {
+            log.info(ErrorCode.INVALID_TOKEN.getMessage());
+            log.info("받은 토큰: " + token);
+
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
+            log.info(ErrorCode.INVALID_TOKEN.getMessage());
+            log.info("받은 토큰: " + token);
+
             throw new CustomException(ErrorCode.NON_LOGIN);
         }
     }
@@ -89,10 +98,16 @@ public class JwtTokenProvider {
             return !claims.getBody().getExpiration().before(new Date());
         } catch (ExpiredJwtException e){
             log.info(ErrorCode.EXPIRED_TOKEN.getMessage());
+            log.info("받은 토큰: " + jwtToken);
+
         } catch (JwtException e){
             log.info(ErrorCode.INVALID_TOKEN.getMessage());
+            log.info("받은 토큰: " + jwtToken);
+
         } catch (IllegalArgumentException e){
             log.info(ErrorCode.NON_LOGIN.getMessage());
+            log.info("받은 토큰: " + jwtToken);
+
         }
         return false;
     }

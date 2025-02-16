@@ -1,4 +1,4 @@
-package ewha.capston.cockChat.domain.chat.domain;
+package ewha.capston.cockChat.domain.participant.domain;
 
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.member.domain.Member;
@@ -12,21 +12,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participant {
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantId;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
-    private ChatRoom chatRoom;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    @Column(nullable = false)
-    private Boolean role;
+    @Column
+    private Boolean isOwner;
 
     @Column
     private String positiveKeywords;
@@ -37,13 +30,24 @@ public class Participant {
     @Column
     private String roomNickname;
 
+    @Column
+    private String participantImgUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "chatRoom_id")
+    private ChatRoom chatRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
-    public Participant(ChatRoom chatRoom, Member member, Boolean role, String roomNickname){
+    public Participant(Boolean isOwner, String roomNickname, String participantImgUrl, ChatRoom chatRoom, Member member){
+        this.isOwner = isOwner;
+        this.roomNickname = roomNickname;
+        this.participantImgUrl = participantImgUrl;
         this.chatRoom = chatRoom;
         this.member = member;
-        this.role = role;
-        this.roomNickname = roomNickname;
     }
 
 

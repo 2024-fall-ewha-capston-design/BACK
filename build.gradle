@@ -74,3 +74,12 @@ bootRun {
 jar {
 	enabled = false
 }
+
+/*
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs.add("-parameters")
+}
+
+ */
+
+compileJava {    options.compilerArgs << '-parameters'}
