@@ -29,7 +29,6 @@ public class ChatRoomController {
         return chatService.createChatRoom(requestDto, member);
     }
 
-
     /* mongoDB 테스트 */
     @PostMapping("/chat/test")
     public ResponseEntity testMongo(){
@@ -37,6 +36,4 @@ public class ChatRoomController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("성공");
     }
-
-
 }

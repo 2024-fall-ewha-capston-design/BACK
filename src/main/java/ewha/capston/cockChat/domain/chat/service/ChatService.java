@@ -3,16 +3,14 @@ package ewha.capston.cockChat.domain.chat.service;
 import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.domain.MessageType;
-import ewha.capston.cockChat.domain.chat.domain.Participant;
 import ewha.capston.cockChat.domain.chat.dto.ChatMessageRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
-import ewha.capston.cockChat.domain.chat.repository.ParticipantRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
-import ewha.capston.cockChat.domain.member.service.MemberService;
+import ewha.capston.cockChat.domain.participant.domain.Participant;
+import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -68,8 +66,9 @@ public class ChatService {
         Participant participant = participantRepository.save(Participant.builder()
                         .chatRoom(chatRoom)
                         .member(member)
-                        .role(Boolean.FALSE)
+                        .isOwner(Boolean.TRUE)
                         .roomNickname(roomNickname)
+                        .participantImgUrl(member.getProfileImgUrl())
                         .build()
         );
 
