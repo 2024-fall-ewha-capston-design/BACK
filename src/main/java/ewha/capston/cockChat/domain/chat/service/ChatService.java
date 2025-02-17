@@ -80,6 +80,14 @@ public class ChatService {
                 .body(ChatRoomResponseDto.of(chatRoom));
     }
 
+    /* 채팅방 고유 코드로 채팅방 조회 */
+    public ResponseEntity<ChatRoomResponseDto> getChatRoomByIdentifier(Member member, String code) {
+        ChatRoom chatRoom = chatRoomRepository.findByIdentifier(code)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ChatRoomResponseDto.of(chatRoom));
+    }
+
     /* 메시지 보내기 */
     public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) {
 
@@ -122,5 +130,4 @@ public class ChatService {
         }
         return isUpperCase ? sb.toString() : sb.toString().toLowerCase();
     }
-
 }

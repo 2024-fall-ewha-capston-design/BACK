@@ -9,10 +9,7 @@ import ewha.capston.cockChat.global.config.auth.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +21,15 @@ public class ChatRoomController {
 
     /* 채팅방 생성 */
     // 이후  @AuthUser 추가하기
-    @PostMapping("/chatRoom")
+    @PostMapping("/chatRooms")
     public ResponseEntity<ChatRoomResponseDto> createChatRoom( @AuthUser Member member, @RequestBody ChatRoomRequestDto requestDto){
         return chatService.createChatRoom(requestDto, member);
+    }
+
+    /* 고유 코드로 채팅방 조회 */
+    @GetMapping("/chatRooms/{code}")
+    public ResponseEntity<ChatRoomResponseDto> getChatRoomByIdentifier(@AuthUser Member member, @PathVariable String code){
+        return chatService.getChatRoomByIdentifier(member,code);
     }
 
     /* mongoDB 테스트 */
