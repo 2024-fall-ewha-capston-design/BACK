@@ -18,6 +18,7 @@ public class ChatRoomResponseDto {
     private Boolean roomType;
     private Long password;
     private Boolean nicknameType;
+    private String chatRoomImgUrl;
 
     public static ChatRoomResponseDto of(ChatRoom chatRoom){
         return ChatRoomResponseDto.builder()
@@ -28,8 +29,7 @@ public class ChatRoomResponseDto {
                 .roomType(chatRoom.getRoomType())
                 .password(chatRoom.getPassword())
                 .nicknameType(chatRoom.getNicknameType())
+                .chatRoomImgUrl(chatRoom.getChatRoomImgUrl())
                 .build();
     }
-
-
 }

@@ -50,5 +50,4 @@ public class Participant {
         this.member = member;
     }
 
-
 }
