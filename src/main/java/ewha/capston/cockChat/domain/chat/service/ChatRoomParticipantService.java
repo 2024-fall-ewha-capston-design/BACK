@@ -2,6 +2,8 @@ package ewha.capston.cockChat.domain.chat.service;
 
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
@@ -54,5 +56,16 @@ public class ChatRoomParticipantService {
     /* 채팅방 탈퇴 */
     public void removeParticipantFromChatRoom(Participant participant){
         participantRepository.delete(participant);
+    }
+
+    /* 채팅방 환경 설정 수정 */
+    public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(Member member, Long chatRoomId, ChatRoomSettingRequestDto requestDto) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        participant.updateSettings(requestDto.getPositiveKeywords(), requestDto.getNegativeKeywords());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ChatRoomSettingResponseDto.of(participant));
     }
 }

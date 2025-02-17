@@ -1,6 +1,8 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatRoomParticipantService;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
@@ -23,9 +25,19 @@ public class ChatRoomParticipantController {
         return chatRoomParticipantService.getChatRoomsByMember(member);
     }
 
+    /* 채팅방 설정 */
+    @PutMapping("/{chatRoomId}/settings")
+    public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId
+    , @RequestBody ChatRoomSettingRequestDto requestDto){
+        return chatRoomParticipantService.updateSettings(member,chatRoomId,requestDto);
+    }
+
+
     /* 채팅방 탈퇴 */
     @DeleteMapping("/{chatRoomId}/participants/me")
-    public ResponseEntity<Void> removeParticipantFromChatRoom(@AuthUser Member member, @PathVariable Long chatRoomId){
+    public ResponseEntity<Void> removeParticipantFromChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
         return chatRoomParticipantService.removeParticipantFromChatRoom(member, chatRoomId);
     }
+
+
 }

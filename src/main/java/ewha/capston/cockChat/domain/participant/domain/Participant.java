@@ -50,4 +50,9 @@ public class Participant {
         this.member = member;
     }
 
+    public void updateSettings(String positiveKeywords, String negativeKeywords){
+        this.positiveKeywords = positiveKeywords;
+        this.negativeKeywords = negativeKeywords;
+    }
+
 }
