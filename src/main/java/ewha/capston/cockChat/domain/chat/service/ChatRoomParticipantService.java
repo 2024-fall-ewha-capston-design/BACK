@@ -1,0 +1,71 @@
+package ewha.capston.cockChat.domain.chat.service;
+
+import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
+import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
+import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.participant.domain.Participant;
+import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
+import ewha.capston.cockChat.global.exception.CustomException;
+import ewha.capston.cockChat.global.exception.ErrorCode;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class ChatRoomParticipantService {
+
+    private final ChatRoomRepository chatRoomRepository;
+    private final ParticipantRepository participantRepository;
+
+    /* 참여 중인 모든 채팅방 목록 조회 */
+    public ResponseEntity<List<ChatRoomResponseDto>> getChatRoomsByMember(Member member) {
+        List<Participant> participantList = participantRepository.findAllByMember(member);
+        List<ChatRoom> chatRoomList = new ArrayList<>() ;
+        for(Participant participant : participantList){
+            ChatRoom chatRoom = chatRoomRepository.findById(participant.getChatRoom().getRoomId())
+                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+            chatRoomList.add(chatRoom);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(chatRoomList.stream().map(ChatRoomResponseDto::of).collect(Collectors.toList()));
+    }
+
+
+    /* 참여 중인 채팅방에서 탈퇴 */
+    public ResponseEntity<Void> removeParticipantFromChatRoom(Member member, Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        removeParticipantFromChatRoom(participant);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(null);
+    }
+
+    /* 채팅방 탈퇴 */
+    public void removeParticipantFromChatRoom(Participant participant){
+        participantRepository.delete(participant);
+    }
+
+    /* 채팅방 환경 설정 수정 */
+    public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(Member member, Long chatRoomId, ChatRoomSettingRequestDto requestDto) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        participant.updateSettings(requestDto.getPositiveKeywords(), requestDto.getNegativeKeywords());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ChatRoomSettingResponseDto.of(participant));
+    }
+}
