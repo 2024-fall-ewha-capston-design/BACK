@@ -39,6 +39,7 @@ public class ChatRoomParticipantService {
                 .body(chatRoomList.stream().map(ChatRoomResponseDto::of).collect(Collectors.toList()));
     }
 
+
     /* 참여 중인 채팅방에서 탈퇴 */
     public ResponseEntity<Void> removeParticipantFromChatRoom(Member member, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
