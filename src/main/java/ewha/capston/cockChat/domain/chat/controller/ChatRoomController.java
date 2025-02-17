@@ -2,6 +2,7 @@ package ewha.capston.cockChat.domain.chat.controller;
 
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.service.ChatRoomService;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.service.MemberService;
@@ -18,18 +19,19 @@ public class ChatRoomController {
 
     private final ChatService chatService;
     private final MemberService memberService;
+    private final ChatRoomService chatRoomService;
 
     /* 채팅방 생성 */
     // 이후  @AuthUser 추가하기
     @PostMapping("/chatRooms")
     public ResponseEntity<ChatRoomResponseDto> createChatRoom( @AuthUser Member member, @RequestBody ChatRoomRequestDto requestDto){
-        return chatService.createChatRoom(requestDto, member);
+        return chatRoomService.createChatRoom(requestDto, member);
     }
 
     /* 고유 코드로 채팅방 조회 */
     @GetMapping("/chatRooms/{code}")
     public ResponseEntity<ChatRoomResponseDto> getChatRoomByIdentifier(@AuthUser Member member, @PathVariable String code){
-        return chatService.getChatRoomByIdentifier(member,code);
+        return chatRoomService.getChatRoomByIdentifier(member,code);
     }
 
     /* mongoDB 테스트 */
