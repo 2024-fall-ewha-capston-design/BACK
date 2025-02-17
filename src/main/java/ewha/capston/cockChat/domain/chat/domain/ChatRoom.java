@@ -31,13 +31,17 @@ public class ChatRoom {
     @Column(nullable = false)
     private Boolean nicknameType;
 
+    @Column
+    private String chatRoomImgUrl;
+
     @Builder
-    public ChatRoom(String identifier, Boolean roomType, Long password, String roomName, Boolean nicknameType){
+    public ChatRoom(String identifier, Boolean roomType, Long password, String roomName, Boolean nicknameType, String chatRoomImgUrl){
         this.identifier = identifier;
         this.roomType = roomType;
         this.password = password;
         this.roomName = roomName;
         this.nicknameType = nicknameType;
+        this.chatRoomImgUrl = chatRoomImgUrl;
     }
 
 

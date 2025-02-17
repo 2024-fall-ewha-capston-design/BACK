@@ -12,4 +12,5 @@ public class ChatRoomRequestDto {
     private Boolean roomType;
     private Long password;
     private Boolean nicknameType;
+    private String chatRoomImgUrl;
 }

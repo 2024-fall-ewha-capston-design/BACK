@@ -5,6 +5,7 @@ import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.service.MemberService;
+import ewha.capston.cockChat.global.config.auth.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,7 @@ public class ChatRoomController {
     /* 채팅방 생성 */
     // 이후  @AuthUser 추가하기
     @PostMapping("/chatRoom")
-    public ResponseEntity<ChatRoomResponseDto> createChatRoom(@RequestBody ChatRoomRequestDto requestDto){
-        Member member = memberService.findMemberByEmail("ahtnwl1004@ewhain.net");
+    public ResponseEntity<ChatRoomResponseDto> createChatRoom( @AuthUser Member member, @RequestBody ChatRoomRequestDto requestDto){
         return chatService.createChatRoom(requestDto, member);
     }
 
