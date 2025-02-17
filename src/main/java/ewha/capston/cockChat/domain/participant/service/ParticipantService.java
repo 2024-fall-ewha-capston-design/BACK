@@ -65,4 +65,6 @@ public class ParticipantService {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ParticipantResponseDto.of(participant));
     }
+
+
 }
