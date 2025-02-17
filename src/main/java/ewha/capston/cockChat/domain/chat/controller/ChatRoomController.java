@@ -23,7 +23,7 @@ public class ChatRoomController {
 
     /* 채팅방 생성 */
     // 이후  @AuthUser 추가하기
-    @PostMapping("/chatroom")
+    @PostMapping("/chatRoom")
     public ResponseEntity<ChatRoomResponseDto> createChatRoom(@RequestBody ChatRoomRequestDto requestDto){
         Member member = memberService.findMemberByEmail("ahtnwl1004@ewhain.net");
         return chatService.createChatRoom(requestDto, member);
