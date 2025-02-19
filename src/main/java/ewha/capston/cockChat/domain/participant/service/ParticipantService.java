@@ -16,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -68,5 +71,16 @@ public class ParticipantService {
                 .body(ParticipantResponseDto.of(participant));
     }
 
-
+    /* 회원의 익명 프로필 목록 조회 */
+    public ResponseEntity<List<ParticipantResponseDto>> getAnonymousProfileListByMember(Member member) {
+        List<Participant> participantList = participantRepository.findAllByMember(member);
+        List<ParticipantResponseDto> responseDtoList = new ArrayList<>();
+        for(Participant participant : participantList){
+            if(participant.getChatRoom().getIsAnonymousChatRoom().equals(Boolean.TRUE)){
+                responseDtoList.add(ParticipantResponseDto.of(participant));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseDtoList);
+    }
 }
