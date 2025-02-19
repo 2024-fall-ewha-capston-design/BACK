@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
@@ -32,6 +34,12 @@ public class ChatRoomController {
     @GetMapping("/chatRooms/{code}")
     public ResponseEntity<ChatRoomResponseDto> getChatRoomByIdentifier(@AuthUser Member member, @PathVariable String code){
         return chatRoomService.getChatRoomByIdentifier(member,code);
+    }
+
+    /* 채팅방 이름으로 채팅방 목록 조회 */
+    @GetMapping("/chatRooms")
+    public ResponseEntity<List<ChatRoomResponseDto>> getChatRoomListByRoomName(@AuthUser Member member, @RequestParam String roomName){
+        return chatRoomService.getChatRoomListByRoomName(roomName);
     }
 
     /* mongoDB 테스트 */

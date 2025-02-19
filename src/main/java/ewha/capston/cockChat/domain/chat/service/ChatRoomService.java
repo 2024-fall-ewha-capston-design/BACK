@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -58,8 +60,6 @@ public class ChatRoomService {
                 .body(ChatRoomResponseDto.of(chatRoom));
     }
 
-
-
     /* 랜덤 문자열 생성 */
     public  String generateRandomMixStr(int length, boolean isUpperCase) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -74,4 +74,16 @@ public class ChatRoomService {
         return isUpperCase ? sb.toString() : sb.toString().toLowerCase();
     }
 
+    /* 채팅방 이름으로 채팅방 조회 */
+    public ResponseEntity<List<ChatRoomResponseDto>> getChatRoomListByRoomName(String roomName) {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findByRoomNameContaining(roomName);
+        List<ChatRoomResponseDto> responseDtoList = new ArrayList<>();
+        for(ChatRoom chatRoom : chatRoomList){
+            if(chatRoom.getIsSecretChatRoom().equals(Boolean.FALSE)){
+                responseDtoList.add(ChatRoomResponseDto.of(chatRoom));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseDtoList);
+    }
 }
