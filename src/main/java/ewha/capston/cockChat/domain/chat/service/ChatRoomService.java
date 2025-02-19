@@ -105,5 +105,4 @@ public class ChatRoomService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
     }
-
 }
