@@ -23,8 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOriginPatterns("http://localhost:63342",
-                        "*","http://localhost:3000", "http://localhost:8080")  // 포트 번호 포함 와일드카드 사용
+                .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080", "http://localhost:63342")  // 특정 도메인 허용
                 .withSockJS();
     }
 }
