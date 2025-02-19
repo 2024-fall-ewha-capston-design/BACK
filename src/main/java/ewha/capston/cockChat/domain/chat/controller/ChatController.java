@@ -19,7 +19,6 @@ public class ChatController {
     private final ChatService chatService;
 
     /* 채팅 보내기 */
-    //@MessageMapping("/app/chat/send")
     @MessageMapping("/chat/send")
     public void sendMessage(@Payload  ChatMessageRequestDto requestDto){
         log.info("Received message request: {}", requestDto);

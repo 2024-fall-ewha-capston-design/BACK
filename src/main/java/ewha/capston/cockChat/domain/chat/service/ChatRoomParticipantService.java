@@ -50,6 +50,7 @@ public class ChatRoomParticipantService {
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
         Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(participant.getIsOwner().equals(Boolean.TRUE)) throw new CustomException(ErrorCode.CANNOT_REMOVE_OWNER);
         removeParticipantFromChatRoom(participant);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);

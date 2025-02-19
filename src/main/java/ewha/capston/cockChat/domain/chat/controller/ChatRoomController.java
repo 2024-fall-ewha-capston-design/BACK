@@ -24,7 +24,6 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     /* 채팅방 생성 */
-    // 이후  @AuthUser 추가하기
     @PostMapping("/chatRooms")
     public ResponseEntity<ChatRoomResponseDto> createChatRoom( @AuthUser Member member, @RequestBody ChatRoomRequestDto requestDto){
         return chatRoomService.createChatRoom(requestDto, member);
