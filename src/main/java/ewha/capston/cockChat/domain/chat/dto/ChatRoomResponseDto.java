@@ -15,9 +15,9 @@ public class ChatRoomResponseDto {
     private String identifier;
     private Long lastChat;
     private String roomName;
-    private Boolean roomType;
+    private Boolean isSecretChatRoom;
     private Long password;
-    private Boolean nicknameType;
+    private Boolean isAnonymousChatRoom;
     private String chatRoomImgUrl;
 
     public static ChatRoomResponseDto of(ChatRoom chatRoom){
@@ -26,9 +26,9 @@ public class ChatRoomResponseDto {
                 .identifier(chatRoom.getIdentifier())
                 .lastChat(0L) // 이후 수정
                 .roomName(chatRoom.getRoomName())
-                .roomType(chatRoom.getRoomType())
+                .isSecretChatRoom(chatRoom.getIsSecretChatRoom())
                 .password(chatRoom.getPassword())
-                .nicknameType(chatRoom.getNicknameType())
+                .isAnonymousChatRoom(chatRoom.getIsAnonymousChatRoom())
                 .chatRoomImgUrl(chatRoom.getChatRoomImgUrl())
                 .build();
     }

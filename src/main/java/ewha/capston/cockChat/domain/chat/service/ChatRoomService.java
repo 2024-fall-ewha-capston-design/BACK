@@ -38,28 +38,12 @@ public class ChatRoomService {
         /* 채팅방 생성 */
         ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder()
                 .roomName(requestDto.getRoomName())
-                .roomType(requestDto.getRoomType())
-                .nicknameType(requestDto.getNicknameType())
+                .isSecretChatRoom(requestDto.getIsSecretChatRoom())
+                .isAnonymousChatRoom(requestDto.getIsAnonymousChatRoom())
                 .password(requestDto.getPassword())
                 .identifier(identifier)
                 .chatRoomImgUrl(requestDto.getChatRoomImgUrl())
                 .build());
-
-
-        /* 채팅방 생성인을 participant 로 채팅방에 참가. <- 이 부분 우선 주석 처리 */
-        /*
-        String roomNickname = "별명";
-        if(chatRoom.getNicknameType() == Boolean.FALSE) roomNickname = ; // 별명 사용 채팅방인 경우
-        else roomNickname = member.getNickname(); // 실명 사용 채팅방인 경우
-        Participant participant = participantRepository.save(Participant.builder()
-                        .chatRoom(chatRoom)
-                        .member(member)
-                        .isOwner(Boolean.TRUE)
-                        .roomNickname(roomNickname)
-                        .participantImgUrl(member.getProfileImgUrl())
-                        .build()
-        );
-         */
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ChatRoomResponseDto.of(chatRoom));

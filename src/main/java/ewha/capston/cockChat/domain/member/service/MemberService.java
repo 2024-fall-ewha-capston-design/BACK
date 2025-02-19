@@ -6,6 +6,9 @@ import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.dto.request.MemberUpdateRequestDto;
 import ewha.capston.cockChat.domain.member.dto.response.MemberResponseDto;
 import ewha.capston.cockChat.domain.member.repository.MemberRepository;
+import ewha.capston.cockChat.domain.participant.domain.Participant;
+import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +19,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
+
     private final MemberRepository memberRepository;
 
     /* 멤버 생성 */

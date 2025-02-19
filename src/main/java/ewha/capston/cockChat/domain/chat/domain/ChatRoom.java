@@ -20,7 +20,7 @@ public class ChatRoom {
     private String identifier;
 
     @Column(nullable = false)
-    private Boolean roomType;
+    private Boolean isSecretChatRoom;
 
     @Column
     private Long password;
@@ -29,18 +29,18 @@ public class ChatRoom {
     private String roomName;
 
     @Column(nullable = false)
-    private Boolean nicknameType;
+    private Boolean isAnonymousChatRoom;
 
     @Column
     private String chatRoomImgUrl;
 
     @Builder
-    public ChatRoom(String identifier, Boolean roomType, Long password, String roomName, Boolean nicknameType, String chatRoomImgUrl){
+    public ChatRoom(String identifier, Boolean isSecretChatRoom, Long password, String roomName, Boolean isAnonymousChatRoom, String chatRoomImgUrl){
         this.identifier = identifier;
-        this.roomType = roomType;
+        this.isSecretChatRoom = isSecretChatRoom;
         this.password = password;
         this.roomName = roomName;
-        this.nicknameType = nicknameType;
+        this.isAnonymousChatRoom = isAnonymousChatRoom;
         this.chatRoomImgUrl = chatRoomImgUrl;
     }
 

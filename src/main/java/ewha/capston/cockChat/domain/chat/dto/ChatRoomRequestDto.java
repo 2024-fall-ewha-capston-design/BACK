@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoomRequestDto {
     private String roomName;
-    private Boolean roomType;
+    private Boolean isSecretChatRoom;
     private Long password;
-    private Boolean nicknameType;
+    private Boolean isAnonymousChatRoom;
     private String chatRoomImgUrl;
 }

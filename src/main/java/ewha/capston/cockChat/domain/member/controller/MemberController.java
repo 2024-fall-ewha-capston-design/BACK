@@ -7,6 +7,9 @@ import ewha.capston.cockChat.domain.member.service.AuthService;
 import ewha.capston.cockChat.domain.member.service.MemberService;
 import ewha.capston.cockChat.domain.member.dto.request.LoginRequestDto;
 import ewha.capston.cockChat.domain.member.dto.response.LoginResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.service.ParticipantService;
+import ewha.capston.cockChat.global.config.auth.AuthUser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,6 +26,7 @@ import java.io.IOException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ParticipantService participantService;
     private final AuthService authService;
 
     /* 로그인 */
@@ -45,6 +50,11 @@ public class MemberController {
         return memberService.getMemberProfile(member);
     }
 
+    /* 익명 프로필 목록 조회 */
+    @GetMapping("/members/my/anonymous-profile")
+    public ResponseEntity<List<ParticipantResponseDto>> getAnonymousProfileListByMember(@AuthUser Member member){
+        return participantService.getAnonymousProfileListByMember(member);
+    }
 
 
 }
