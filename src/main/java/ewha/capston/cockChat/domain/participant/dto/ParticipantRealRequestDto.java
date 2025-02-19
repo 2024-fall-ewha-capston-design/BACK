@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ParticipantRequestDto {
-    private String roomNickname;
-    private String participantImgUrl;
+public class ParticipantRealRequestDto {
+    private Boolean isOwner;
 }
