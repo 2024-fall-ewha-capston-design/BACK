@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -82,5 +83,13 @@ public class ParticipantService {
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseDtoList);
+    }
+
+    /* 실명 사용 모든 프로필 업데이트 */
+    public void updateAllRealNameProfileList(Member member) {
+        List<Participant> participantList = participantRepository.findAllByMember(member);
+        participantList.stream()
+                .filter(participant -> Boolean.FALSE.equals(participant.getChatRoom().getIsAnonymousChatRoom()))
+                .forEach(participant -> participant.updateRealNameParticipant(member));
     }
 }
