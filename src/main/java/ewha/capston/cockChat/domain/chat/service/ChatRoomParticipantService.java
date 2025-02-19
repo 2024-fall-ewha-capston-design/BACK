@@ -7,6 +7,8 @@ import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
+import ewha.capston.cockChat.domain.participant.dto.OwnerRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
@@ -67,5 +69,25 @@ public class ChatRoomParticipantService {
         participant.updateSettings(requestDto.getPositiveKeywords(), requestDto.getNegativeKeywords());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ChatRoomSettingResponseDto.of(participant));
+    }
+
+    /* 채팅방 방장 변경 */
+    public ResponseEntity<ParticipantResponseDto> updateOwner(Member member, Long chatRoomId, OwnerRequestDto requestDto) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+
+        Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_HOST);
+
+        Participant newOwner = participantRepository.findById(requestDto.getNewOwnerId())
+                .orElseThrow(()-> new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!newOwner.getChatRoom().equals(chatRoom)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+
+        owner.updateIsOwner(Boolean.FALSE);
+        newOwner.updateIsOwner(Boolean.TRUE);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ParticipantResponseDto.of(newOwner));
     }
 }
