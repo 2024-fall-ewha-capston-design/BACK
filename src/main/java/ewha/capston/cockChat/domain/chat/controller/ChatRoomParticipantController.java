@@ -5,6 +5,8 @@ import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatRoomParticipantService;
 import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.participant.dto.OwnerRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,11 @@ public class ChatRoomParticipantController {
         return chatRoomParticipantService.updateSettings(member,chatRoomId,requestDto);
     }
 
+    /* 채팅방 방장 변경 */
+    @PutMapping("/{chatRoomId}/owner")
+    public ResponseEntity<ParticipantResponseDto> updateChatRoomOwner(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId, @RequestBody OwnerRequestDto requestDto){
+        return chatRoomParticipantService.updateOwner(member, chatRoomId, requestDto);
+    }
 
     /* 채팅방 탈퇴 */
     @DeleteMapping("/{chatRoomId}/participants/me")
@@ -39,5 +46,10 @@ public class ChatRoomParticipantController {
         return chatRoomParticipantService.removeParticipantFromChatRoom(member, chatRoomId);
     }
 
+    /* 방장 권한 참여자 탈퇴 */
+    @DeleteMapping("/{chatRoomId}/participants/{participantId}")
+    public ResponseEntity<Void> removeParticipantByOwner(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId, @PathVariable(name = "participantId") Long participantId){
+        return chatRoomParticipantService.removeParticipantByOwner(member,chatRoomId,participantId);
+    }
 
 }

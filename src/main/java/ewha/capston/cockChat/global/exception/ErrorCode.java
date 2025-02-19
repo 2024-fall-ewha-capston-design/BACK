@@ -27,6 +27,9 @@ public enum ErrorCode {
 
     /* participant */
     INVALID_PARTICIPANT(HttpStatus.BAD_REQUEST,"잘못된 채팅 참여자입니다."),
+    INVALID_OWNER(HttpStatus.FORBIDDEN, "방장 권한이 없습니다."),
+    NOT_A_PARTICIPANT(HttpStatus.BAD_REQUEST, "채팅방에 참여 중인 회원이 아닙니다."),
+    CANNOT_REMOVE_OWNER(HttpStatus.BAD_REQUEST, "방장은 탈퇴할 수 없습니다."),
 
     /* file */
     INPUT_IS_NULL(HttpStatus.BAD_REQUEST,"입력으로 null이 들어왔습니다."),
