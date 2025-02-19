@@ -61,6 +61,12 @@ public class Participant {
         this.isOwner = isOwner;
     }
 
+    /* 실명 사용 프로필 수정 */
+    public void updateRealNameParticipant(Member member){
+        this.roomNickname = member.getNickname();
+        this.participantImgUrl = member.getProfileImgUrl();
+    }
+
 
 
 }

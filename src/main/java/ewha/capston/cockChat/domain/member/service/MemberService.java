@@ -9,6 +9,7 @@ import ewha.capston.cockChat.domain.member.repository.MemberRepository;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
+import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ParticipantService participantService;
 
     /* 멤버 생성 */
     public Member saveMember(@RequestBody GoogleUser googleUser) {
@@ -75,6 +77,7 @@ public class MemberService {
     public ResponseEntity<MemberResponseDto> updateMember(Member member, MemberUpdateRequestDto requestDto) {
         member.updateNickname(requestDto.getNickname());
         member.updateProfileImgUrl(requestDto.getProfileImgUrl());
+        participantService.updateAllRealNameProfileList(member);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MemberResponseDto.of(member));
     }

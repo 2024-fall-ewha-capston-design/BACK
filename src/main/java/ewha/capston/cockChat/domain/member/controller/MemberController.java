@@ -38,15 +38,13 @@ public class MemberController {
 
     /* 프로필 업데이트 */
     @PutMapping("/members/profile")
-    public ResponseEntity<MemberResponseDto> updateMember(@RequestBody MemberUpdateRequestDto requestDto){
-        Member member = new Member("test@email.com","testName"); // 수정
+    public ResponseEntity<MemberResponseDto> updateMember(@AuthUser Member member, @RequestBody MemberUpdateRequestDto requestDto){
         return memberService.updateMember(member,requestDto);
     }
 
     /* 프로필 조회 */
     @GetMapping("/members/my")
-    public ResponseEntity<MemberResponseDto> getMemberProfile(){
-        Member member = new Member("test@email.com","testName"); // 수정
+    public ResponseEntity<MemberResponseDto> getMemberProfile(@AuthUser Member member){
         return memberService.getMemberProfile(member);
     }
 
@@ -55,6 +53,4 @@ public class MemberController {
     public ResponseEntity<List<ParticipantResponseDto>> getAnonymousProfileListByMember(@AuthUser Member member){
         return participantService.getAnonymousProfileListByMember(member);
     }
-
-
 }

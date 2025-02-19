@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Getter
 @NoArgsConstructor
 @Document(collection = "chats")
-public class Chat {
+public class Chat extends BaseTimeEntity{
     @Id
     private String id;
 
