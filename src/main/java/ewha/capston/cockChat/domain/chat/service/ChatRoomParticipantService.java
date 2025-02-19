@@ -78,7 +78,7 @@ public class ChatRoomParticipantService {
 
         Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
-        if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_HOST);
+        if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_OWNER);
 
         Participant newOwner = participantRepository.findById(requestDto.getNewOwnerId())
                 .orElseThrow(()-> new CustomException(ErrorCode.INVALID_PARTICIPANT));
@@ -89,5 +89,25 @@ public class ChatRoomParticipantService {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ParticipantResponseDto.of(newOwner));
+    }
+
+
+    /* 방장 권한 회원 탈퇴 */
+    public ResponseEntity<Void> removeParticipantByOwner(Member member, Long chatRoomId, Long participantId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+
+        Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_OWNER);
+
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(()-> new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!participant.getChatRoom().equals(chatRoom)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+        if(participant.getIsOwner().equals(Boolean.TRUE)) throw new CustomException(ErrorCode.CANNOT_REMOVE_OWNER);
+
+        participantRepository.delete(participant);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(null);
     }
 }

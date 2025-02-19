@@ -40,11 +40,16 @@ public class ChatRoomParticipantController {
         return chatRoomParticipantService.updateOwner(member, chatRoomId, requestDto);
     }
 
-
     /* 채팅방 탈퇴 */
     @DeleteMapping("/{chatRoomId}/participants/me")
     public ResponseEntity<Void> removeParticipantFromChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
         return chatRoomParticipantService.removeParticipantFromChatRoom(member, chatRoomId);
+    }
+
+    /* 방장 권한 참여자 탈퇴 */
+    @DeleteMapping("/{chatRoomId}/participants/{participantId}")
+    public ResponseEntity<Void> removeParticipantByOwner(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId, @PathVariable(name = "participantId") Long participantId){
+        return chatRoomParticipantService.removeParticipantByOwner(member,chatRoomId,participantId);
     }
 
 }

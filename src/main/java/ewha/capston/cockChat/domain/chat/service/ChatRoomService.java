@@ -5,6 +5,7 @@ import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
@@ -86,4 +87,23 @@ public class ChatRoomService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseDtoList);
     }
+
+    /* 채팅방 삭제 */
+    public ResponseEntity<Void> removeChatRoom(Member member, Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_OWNER);
+
+        List<Participant> participantList = participantRepository.findAllByChatRoom(chatRoom);
+        for(Participant participant : participantList){
+            participantRepository.delete(participant);
+        }
+
+        chatRoomRepository.delete(chatRoom);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(null);
+    }
+
 }

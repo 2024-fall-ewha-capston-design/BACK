@@ -42,6 +42,12 @@ public class ChatRoomController {
         return chatRoomService.getChatRoomListByRoomName(roomName);
     }
 
+    /* 채팅방 삭제 */
+    @DeleteMapping("/chatRooms/{chatRoomId}")
+    public ResponseEntity<Void> removeChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
+        return chatRoomService.removeChatRoom(member,chatRoomId);
+    }
+
     /* mongoDB 테스트 */
     @PostMapping("/chat/test")
     public ResponseEntity testMongo(){
