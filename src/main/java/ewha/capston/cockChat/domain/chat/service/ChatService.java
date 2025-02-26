@@ -4,6 +4,7 @@ import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.domain.MessageType;
 import ewha.capston.cockChat.domain.chat.dto.ChatMessageRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
@@ -22,6 +23,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -68,4 +71,10 @@ public class ChatService {
         messagingTemplate.convertAndSend("/topic/public/" + roomId, chat);
     }
 
+    /* 채팅 내역 조회 */
+    public ResponseEntity<List<ChatResponseDto>> getChatMessageList(Long chatRoomId) {
+        List<Chat> chatList = mongoChatRepository.findAllByChatroomIdOrderByCreatedDateAsc(chatRoomId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(chatList.stream().map(ChatResponseDto::of).collect(Collectors.toList()));
+    }
 }
