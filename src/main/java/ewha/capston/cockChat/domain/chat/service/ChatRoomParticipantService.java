@@ -30,6 +30,8 @@ public class ChatRoomParticipantService {
     private final ChatRoomRepository chatRoomRepository;
     private final ParticipantRepository participantRepository;
 
+    private final ChatRoomService chatRoomService;
+
     /* 참여 중인 모든 채팅방 목록 조회 */
     public ResponseEntity<List<ChatRoomResponseDto>> getChatRoomsByMember(Member member) {
         List<Participant> participantList = participantRepository.findAllByMember(member);
@@ -39,8 +41,9 @@ public class ChatRoomParticipantService {
                     .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
             chatRoomList.add(chatRoom);
         }
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(chatRoomList.stream().map(ChatRoomResponseDto::of).collect(Collectors.toList()));
+                .body(chatRoomList.stream().map(chatRoomService::makeChatRoomResponseDto).collect(Collectors.toList()));
     }
 
 
