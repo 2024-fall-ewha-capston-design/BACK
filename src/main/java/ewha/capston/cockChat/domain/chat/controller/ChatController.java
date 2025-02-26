@@ -1,7 +1,6 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
 import ewha.capston.cockChat.domain.chat.dto.ChatMessageRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

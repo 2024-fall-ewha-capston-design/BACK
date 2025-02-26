@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 //@Repository
 public interface MongoChatRepository extends MongoRepository<Chat, String> {
+    Chat findTopByChatroomIdOrderByCreatedDateDesc(Long chatroomId);
 }
+

@@ -1,8 +1,10 @@
 package ewha.capston.cockChat.domain.chat.service;
 
+import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
@@ -25,6 +27,7 @@ import java.util.List;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final MongoChatRepository mongoChatRepository;
     private final ParticipantRepository participantRepository;
 
 
@@ -49,7 +52,7 @@ public class ChatRoomService {
                 .build());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ChatRoomResponseDto.of(chatRoom));
+                .body(makeChatRoomResponseDto(chatRoom));
     }
 
 
@@ -58,7 +61,7 @@ public class ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findByIdentifier(code)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ChatRoomResponseDto.of(chatRoom));
+                .body(makeChatRoomResponseDto(chatRoom));
     }
 
     /* 랜덤 문자열 생성 */
@@ -81,7 +84,7 @@ public class ChatRoomService {
         List<ChatRoomResponseDto> responseDtoList = new ArrayList<>();
         for(ChatRoom chatRoom : chatRoomList){
             if(chatRoom.getIsSecretChatRoom().equals(Boolean.FALSE)){
-                responseDtoList.add(ChatRoomResponseDto.of(chatRoom));
+                responseDtoList.add(makeChatRoomResponseDto(chatRoom));
             }
         }
         return ResponseEntity.status(HttpStatus.OK)
@@ -104,5 +107,10 @@ public class ChatRoomService {
         chatRoomRepository.delete(chatRoom);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
+    }
+
+    /* chatRoomResponseDto 생성 */
+    public ChatRoomResponseDto makeChatRoomResponseDto(ChatRoom chatRoom){
+        return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),mongoChatRepository.findTopByChatroomIdOrderByCreatedDateDesc(chatRoom.getRoomId()));
     }
 }
