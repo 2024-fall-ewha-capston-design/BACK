@@ -91,6 +91,14 @@ public class ChatRoomService {
                 .body(responseDtoList);
     }
 
+    /* 채팅방 비밀번호 확인*/
+    public ResponseEntity<Boolean> checkChatRoomPassword(Long chatRoomId, Long password) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(chatRoom.getPassword().equals(password));
+    }
+
     /* 채팅방 삭제 */
     public ResponseEntity<Void> removeChatRoom(Member member, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
