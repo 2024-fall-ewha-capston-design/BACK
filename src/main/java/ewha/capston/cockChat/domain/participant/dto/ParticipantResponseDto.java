@@ -13,6 +13,7 @@ public class ParticipantResponseDto {
     private Long participantId;
     private String roomNickname;
     private Long roomId;
+    private String roomName;
     private Boolean isOwner;
     private String participantImgUrl;
 
@@ -21,6 +22,7 @@ public class ParticipantResponseDto {
                 .participantId(participant.getParticipantId())
                 .roomNickname(participant.getRoomNickname())
                 .roomId(participant.getChatRoom().getRoomId())
+                .roomName(participant.getChatRoom().getRoomName())
                 .isOwner(participant.getIsOwner())
                 .participantImgUrl(participant.getParticipantImgUrl())
                 .build();

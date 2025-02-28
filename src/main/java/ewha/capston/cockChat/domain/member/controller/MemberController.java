@@ -12,7 +12,6 @@ import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
