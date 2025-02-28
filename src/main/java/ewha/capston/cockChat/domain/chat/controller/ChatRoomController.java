@@ -41,6 +41,13 @@ public class ChatRoomController {
         return chatRoomService.getChatRoomListByRoomName(roomName);
     }
 
+    /* 채팅방 비밀번호 조회 */
+    @GetMapping("/chatRooms/{chatRoomId}/{password}")
+    public ResponseEntity<Boolean> checkChatRoomPassword(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId,
+                                                         @PathVariable(name = "password")Long password ){
+        return chatRoomService.checkChatRoomPassword(chatRoomId,password);
+    }
+
     /* 채팅방 삭제 */
     @DeleteMapping("/chatRooms/{chatRoomId}")
     public ResponseEntity<Void> removeChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
