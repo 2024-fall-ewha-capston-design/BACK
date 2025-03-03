@@ -33,6 +33,9 @@ public class Participant {
     @Column
     private String participantImgUrl;
 
+    @Column
+    private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom;
@@ -42,8 +45,9 @@ public class Participant {
     private Member member;
 
     @Builder
-    public Participant(Boolean isOwner, String roomNickname, String participantImgUrl, ChatRoom chatRoom, Member member){
+    public Participant(Boolean isOwner, Boolean isActive, String roomNickname, String participantImgUrl, ChatRoom chatRoom, Member member){
         this.isOwner = isOwner;
+        this.isActive = isActive;
         this.roomNickname = roomNickname;
         this.participantImgUrl = participantImgUrl;
         this.chatRoom = chatRoom;
@@ -67,6 +71,8 @@ public class Participant {
         this.participantImgUrl = member.getProfileImgUrl();
     }
 
-
-
+    /* 채팅방 탈퇴 */
+    public void deactivateParticipant(){
+        this.isActive = Boolean.FALSE;
+    }
 }

@@ -6,6 +6,7 @@ import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.member.repository.MemberRepository;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.dto.OwnerRequestDto;
 import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
@@ -34,7 +35,7 @@ public class ChatRoomParticipantService {
 
     /* 참여 중인 모든 채팅방 목록 조회 */
     public ResponseEntity<List<ChatRoomResponseDto>> getChatRoomsByMember(Member member) {
-        List<Participant> participantList = participantRepository.findAllByMember(member);
+        List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
         List<ChatRoom> chatRoomList = new ArrayList<>() ;
         for(Participant participant : participantList){
             ChatRoom chatRoom = chatRoomRepository.findById(participant.getChatRoom().getRoomId())
@@ -51,7 +52,7 @@ public class ChatRoomParticipantService {
     public ResponseEntity<Void> removeParticipantFromChatRoom(Member member, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
-        Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+        Participant participant = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(participant.getIsOwner().equals(Boolean.TRUE)) throw new CustomException(ErrorCode.CANNOT_REMOVE_OWNER);
         removeParticipantFromChatRoom(participant);
@@ -61,14 +62,14 @@ public class ChatRoomParticipantService {
 
     /* 채팅방 탈퇴 */
     public void removeParticipantFromChatRoom(Participant participant){
-        participantRepository.delete(participant);
+        participant.deactivateParticipant();
     }
 
     /* 채팅방 환경 설정 수정 */
     public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(Member member, Long chatRoomId, ChatRoomSettingRequestDto requestDto) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
-        Participant participant = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+        Participant participant = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         participant.updateSettings(requestDto.getPositiveKeywords(), requestDto.getNegativeKeywords());
         return ResponseEntity.status(HttpStatus.OK)
@@ -80,13 +81,14 @@ public class ChatRoomParticipantService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
 
-        Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+        Participant owner = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_OWNER);
 
         Participant newOwner = participantRepository.findById(requestDto.getNewOwnerId())
                 .orElseThrow(()-> new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(!newOwner.getChatRoom().equals(chatRoom)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+        if(newOwner.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_PARTICIPANT);
 
         owner.updateIsOwner(Boolean.FALSE);
         newOwner.updateIsOwner(Boolean.TRUE);
@@ -101,7 +103,7 @@ public class ChatRoomParticipantService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
 
-        Participant owner = participantRepository.findByMemberAndChatRoom(member,chatRoom)
+        Participant owner = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(owner.getIsOwner().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.INVALID_OWNER);
 
@@ -110,7 +112,7 @@ public class ChatRoomParticipantService {
         if(!participant.getChatRoom().equals(chatRoom)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
         if(participant.getIsOwner().equals(Boolean.TRUE)) throw new CustomException(ErrorCode.CANNOT_REMOVE_OWNER);
 
-        participantRepository.delete(participant);
+        removeParticipantFromChatRoom(participant);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
     }

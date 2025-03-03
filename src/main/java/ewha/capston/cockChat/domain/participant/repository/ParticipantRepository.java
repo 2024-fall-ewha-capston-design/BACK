@@ -10,10 +10,14 @@ import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
     Boolean existsByChatRoomAndMember(ChatRoom chatRoom, Member member);
+    Boolean existsByChatRoomAndMemberAndIsActiveTrue(ChatRoom chatRoom, Member member);
 
     Optional<Participant> findByMemberAndChatRoom(Member member, ChatRoom chatRoom);
+    Optional<Participant> findByMemberAndChatRoomAndIsActiveTrue(Member member, ChatRoom chatRoom);
 
     List<Participant> findAllByMember(Member member);
+    List<Participant> findAllByMemberAndIsActiveTrue(Member member);
+
 
     List<Participant> findAllByChatRoom(ChatRoom chatRoom);
 
