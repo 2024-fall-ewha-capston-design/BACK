@@ -32,12 +32,13 @@ public class ParticipantService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
 
-        if(participantRepository.existsByChatRoomAndMember(chatRoom,member).equals(Boolean.TRUE))
+        if(participantRepository.existsByChatRoomAndMemberAndIsActiveTrue(chatRoom,member).equals(Boolean.TRUE))
             throw new CustomException(ErrorCode.ALREADY_JOINED_MEMBER);
 
         Participant participant = participantRepository.save(
                 Participant.builder()
                         .isOwner(requestDto.getIsOwner())
+                        .isActive(Boolean.TRUE)
                         .roomNickname(member.getNickname())
                         .participantImgUrl(member.getProfileImgUrl())
                         .chatRoom(chatRoom)
@@ -54,12 +55,14 @@ public class ParticipantService {
     public ResponseEntity<ParticipantResponseDto> joinAnonymousChatroom(Member member, Long chatRoomId, ParticipantAnonymousRequestDto requestDto) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
-        if(participantRepository.existsByChatRoomAndMember(chatRoom,member).equals(Boolean.TRUE))
+
+        if(participantRepository.existsByChatRoomAndMemberAndIsActiveTrue(chatRoom,member).equals(Boolean.TRUE))
             throw new CustomException(ErrorCode.ALREADY_JOINED_MEMBER);
 
         Participant participant = participantRepository.save(
                 Participant.builder()
                         .isOwner(requestDto.getIsOwner())
+                        .isActive(Boolean.TRUE)
                         .roomNickname(requestDto.getRoomNickname())
                         .participantImgUrl(requestDto.getParticipantImgUrl())
                         .chatRoom(chatRoom)
@@ -73,7 +76,7 @@ public class ParticipantService {
 
     /* 회원의 익명 프로필 목록 조회 */
     public ResponseEntity<List<ParticipantResponseDto>> getAnonymousProfileListByMember(Member member) {
-        List<Participant> participantList = participantRepository.findAllByMember(member);
+        List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
         List<ParticipantResponseDto> responseDtoList = new ArrayList<>();
         for(Participant participant : participantList){
             if(participant.getChatRoom().getIsAnonymousChatRoom().equals(Boolean.TRUE)){
@@ -86,7 +89,7 @@ public class ParticipantService {
 
     /* 실명 사용 모든 프로필 업데이트 */
     public void updateAllRealNameProfileList(Member member) {
-        List<Participant> participantList = participantRepository.findAllByMember(member);
+        List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
         participantList.stream()
                 .filter(participant -> Boolean.FALSE.equals(participant.getChatRoom().getIsAnonymousChatRoom()))
                 .forEach(participant -> participant.updateRealNameParticipant(member));
