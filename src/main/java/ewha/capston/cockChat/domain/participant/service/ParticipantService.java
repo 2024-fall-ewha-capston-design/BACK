@@ -3,6 +3,7 @@ package ewha.capston.cockChat.domain.participant.service;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
+import ewha.capston.cockChat.domain.member.dto.request.MemberUpdateRequestDto;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.dto.ParticipantAnonymousRequestDto;
 import ewha.capston.cockChat.domain.participant.dto.ParticipantRealRequestDto;
@@ -92,6 +93,19 @@ public class ParticipantService {
         List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
         participantList.stream()
                 .filter(participant -> Boolean.FALSE.equals(participant.getChatRoom().getIsAnonymousChatRoom()))
-                .forEach(participant -> participant.updateRealNameParticipant(member));
+                .forEach(participant -> participant.updateParticipantProfile(member.getNickname(), member.getProfileImgUrl()));
+    }
+
+    /* 익명 프로필 조회 */
+    public ResponseEntity<ParticipantResponseDto> updateAnonymousProfile(Member member, Long participantId, MemberUpdateRequestDto requestDto) {
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(participant.getChatRoom().getIsAnonymousChatRoom().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_ANONYMOUS);
+        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
+
+        participant.updateParticipantProfile(requestDto.getNickname(), requestDto.getProfileImgUrl());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ParticipantResponseDto.of(participant));
+
     }
 }
