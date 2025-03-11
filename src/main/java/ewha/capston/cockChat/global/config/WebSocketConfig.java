@@ -27,7 +27,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                                           "http://localhost:63342", "https://chatcipe.o-r.kr"
                                           ,"wss://chatcipe.o-r.kr"
                                          )  // 특정 도메인 허용
-                .withSockJS();
+                //.withSockJS()
+            ;
     }
 }
 
