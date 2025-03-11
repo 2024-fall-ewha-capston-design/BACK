@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <style>
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
+<button id="sendButton">전송</button>
+
+<div id="messages"></div>
+
+<script>
+    // 웹소켓 연결
+    const socket = new SockJS('https://chatcipe.o-r.kr/ws-chat');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('✅ WebSocket Connected:', frame);
+
+        // 구독: 1번 방에 대한 메시지 수신
+        stompClient.subscribe('/topic/public/1', function (message) {
+            try {
+                const receivedMessage = JSON.parse(message.body);
+                console.log("📩 Received:", receivedMessage);
+                displayMessage(receivedMessage.content);
+            } catch (error) {
+                console.error("❌ 메시지 처리 오류:", error);
+            }
+        });
+
+    }, function (error) {
+        console.error("❌ WebSocket 연결 실패:", error);
+    });
+
+    // 메시지 전송 버튼 이벤트
+    document.getElementById('sendButton').addEventListener('click', function () {
+        const contents = document.getElementById('messageInput').value.trim();
+        if (!contents) {
+            alert("메시지를 입력하세요!");
+            return;
+        }
+
+        const message = {
+            roomId: 1,   // 1번 방
+            type: "CHAT", // 메시지 타입
+            senderId: 1,  // 예시로 1번 사용자
+            content: contents // 메시지 내용
+        };
+
+        // 서버로 메시지 전송
+        try {
+            stompClient.send("/app/chat/send", {}, JSON.stringify(message));
+            console.log("📤 Sent:", message);
+        } catch (error) {
+            console.error("❌ 메시지 전송 오류:", error);
+        }
+
+        document.getElementById('messageInput').value = ''; // 입력창 비우기
+    });
+
+    // 화면에 메시지를 추가하는 함수
+    function displayMessage(message) {
+        const messagesDiv = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+</script>
+</body>
+</html>
