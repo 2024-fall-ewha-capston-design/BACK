@@ -25,9 +25,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080",
                                           "http://localhost:63342", "https://chatcipe.o-r.kr"
-                                          ,"wss://chatcipe.o-r.kr"
+                                          //,"wss://chatcipe.o-r.kr"
                                          )  // 특정 도메인 허용
-                //.withSockJS()
+                .withSockJS()
             ;
     }
 }
