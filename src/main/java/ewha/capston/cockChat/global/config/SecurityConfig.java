@@ -64,7 +64,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
-                    corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:63342","http://localhost:3000")); // 3000 포트 허용
+                    corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:63342","http://localhost:3000", "https://chatcipe.o-r.kr")); // 3000 포트 허용
                     corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "PUT", "DELETE")); // 허용할 HTTP 메소드
                     corsConfig.setAllowCredentials(true); // 쿠키나 인증 헤더를 포함할 수 있도록 설정
                     corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
