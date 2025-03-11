@@ -22,7 +22,7 @@
 <div id="messages"></div>
 
 <script>
-    const socket = new SockJS('http://localhost:8080/ws-chat'); // WebSocket 연결 경로
+    const socket = new SockJS('wss://chatcipe.o-r.kr/ws-chat'); // WebSocket 연결 경로
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {
