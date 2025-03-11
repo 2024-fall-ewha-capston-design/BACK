@@ -23,11 +23,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080",
-                                          "http://localhost:63342", "https://chatcipe.o-r.kr"
+                .setAllowedOriginPatterns("*")
+               // .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080",
+               //                           "http://localhost:63342", "https://chatcipe.o-r.kr"
                                           //,"wss://chatcipe.o-r.kr"
-                                         )  // 특정 도메인 허용
-                .withSockJS()
+                  //                       )  // 특정 도메인 허용
+               // .withSockJS()
             ;
     }
 }
