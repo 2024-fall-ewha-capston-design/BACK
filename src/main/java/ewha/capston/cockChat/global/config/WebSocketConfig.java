@@ -28,6 +28,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
+                .setAllowedOrigins("https://chatcipe.o-r.kr")
                 /*
                .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080",
                                         "http://localhost:63342", "https://chatcipe.o-r.kr"
