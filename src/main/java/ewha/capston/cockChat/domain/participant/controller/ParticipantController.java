@@ -7,6 +7,7 @@ import ewha.capston.cockChat.domain.participant.dto.ParticipantAnonymousRequestD
 import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,12 @@ public class ParticipantController {
     @PutMapping("/participants/{participantId}/anonymous")
     public ResponseEntity<ParticipantResponseDto> updateAnonymousProfile(@AuthUser Member member, @PathVariable Long participantId, @RequestBody MemberUpdateRequestDto requestDto){
         return participantService.updateAnonymousProfile(member, participantId, requestDto);
+    }
+
+    /* 프로필 조회 */
+    @GetMapping("/participants/{participantId}")
+    public ResponseEntity<ParticipantResponseDto> getParticipant(@AuthUser Member member, @PathVariable Long participantId){
+        return participantService.getParticipant(member, participantId);
     }
 
 }
