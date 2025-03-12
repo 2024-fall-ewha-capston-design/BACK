@@ -13,5 +13,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Boolean existsByIdentifier(String identifier);
     Optional<ChatRoom> findByIdentifier(String code);
     List<ChatRoom> findByRoomNameContaining(String roomName);
+
 }
 

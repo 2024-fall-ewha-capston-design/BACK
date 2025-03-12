@@ -2,12 +2,14 @@ package ewha.capston.cockChat.domain.chat.service;
 
 import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomInfoDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
+import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -90,6 +93,16 @@ public class ChatRoomService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseDtoList);
     }
+
+    /* 채팅방 상세 정보 조회 */
+    public ResponseEntity<ChatRoomInfoDto> getChatRoomInfo(Member member, Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        List<Participant> participantList = participantRepository.findAllByChatRoomAndIsActiveTrue(chatRoom);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ChatRoomInfoDto.of(chatRoom, participantList.stream().map(ParticipantResponseDto::of).collect(Collectors.toList())));
+    }
+
 
     /* 채팅방 비밀번호 확인*/
     public ResponseEntity<Boolean> checkChatRoomPassword(Long chatRoomId, Long password) {

@@ -1,5 +1,6 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
+import ewha.capston.cockChat.domain.chat.dto.ChatRoomInfoDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatRoomService;
@@ -46,6 +47,12 @@ public class ChatRoomController {
     public ResponseEntity<Boolean> checkChatRoomPassword(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId,
                                                          @PathVariable(name = "password")Long password ){
         return chatRoomService.checkChatRoomPassword(chatRoomId,password);
+    }
+
+    /* 채팅방 상세 정보 조회 */
+    @GetMapping("/chatRooms/{chatRoomId}/info")
+    public ResponseEntity<ChatRoomInfoDto> getChatRoomInfo(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
+        return chatRoomService.getChatRoomInfo(member, chatRoomId);
     }
 
     /* 채팅방 삭제 */
