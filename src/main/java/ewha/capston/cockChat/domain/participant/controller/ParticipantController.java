@@ -7,7 +7,6 @@ import ewha.capston.cockChat.domain.participant.dto.ParticipantAnonymousRequestD
 import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

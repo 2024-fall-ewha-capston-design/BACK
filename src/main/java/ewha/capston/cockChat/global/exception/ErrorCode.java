@@ -32,6 +32,9 @@ public enum ErrorCode {
     CANNOT_REMOVE_OWNER(HttpStatus.BAD_REQUEST, "방장은 탈퇴할 수 없습니다."),
     NOT_A_ANONYMOUS(HttpStatus.BAD_REQUEST,"익명 참여자가 아닙니다"),
 
+    /* keyword */
+    EXCEEDED_KEYWORD_LIMIT(HttpStatus.BAD_REQUEST, "저장 가능한 키워드 수를 초과하였습니다."),
+
     /* file */
     INPUT_IS_NULL(HttpStatus.BAD_REQUEST,"입력으로 null이 들어왔습니다."),
     FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"파일 삭제에 실패했습니다."),

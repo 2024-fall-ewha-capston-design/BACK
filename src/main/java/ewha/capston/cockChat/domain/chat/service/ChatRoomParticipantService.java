@@ -66,6 +66,7 @@ public class ChatRoomParticipantService {
     }
 
     /* 채팅방 환경 설정 수정 */
+    /*
     public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(Member member, Long chatRoomId, ChatRoomSettingRequestDto requestDto) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
@@ -75,6 +76,8 @@ public class ChatRoomParticipantService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ChatRoomSettingResponseDto.of(participant));
     }
+
+     */
 
     /* 채팅방 방장 변경 */
     public ResponseEntity<ParticipantResponseDto> updateOwner(Member member, Long chatRoomId, OwnerRequestDto requestDto) {

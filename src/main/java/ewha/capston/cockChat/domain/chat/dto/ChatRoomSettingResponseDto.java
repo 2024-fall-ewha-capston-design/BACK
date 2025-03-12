@@ -14,6 +14,7 @@ public class ChatRoomSettingResponseDto {
     private String positiveKeywords;
     private String negativeKeywords;
 
+    /*
     public static ChatRoomSettingResponseDto of(Participant participant){
         return ChatRoomSettingResponseDto
                 .builder()
@@ -22,4 +23,5 @@ public class ChatRoomSettingResponseDto {
                 .negativeKeywords(participant.getNegativeKeywords())
                 .build();
     }
+     */
 }
