@@ -48,7 +48,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
                 //.setAllowedOriginPatterns("*")
                 //.setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
-               //.withSockJS()
+               .withSockJS()
         ;
     }
 
