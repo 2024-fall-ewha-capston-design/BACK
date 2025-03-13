@@ -25,9 +25,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOriginPatterns("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
+                .setAllowedOriginPatterns("*")
+                .setAllowedOrigins("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
                 .withSockJS();
     }
+
 
 /*
     @Override
