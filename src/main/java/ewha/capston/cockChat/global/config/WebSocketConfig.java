@@ -22,23 +22,31 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app"); // 클라이언트가 서버로 보낼 때 사용하는 prefix
     }
 
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws-chat")
+                .setAllowedOriginPatterns("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
+                .withSockJS();
+    }
 
-
+/*
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
                 .setAllowedOrigins("https://chatcipe.o-r.kr")
-                /*
+
                .setAllowedOriginPatterns("http://localhost:3000", "http://localhost:8080",
                                         "http://localhost:63342", "https://chatcipe.o-r.kr"
                                           ,"wss://chatcipe.o-r.kr"
                                         )
 
-                 */
+
                .withSockJS()
             ;
     }
+
+ */
 
 }
 
