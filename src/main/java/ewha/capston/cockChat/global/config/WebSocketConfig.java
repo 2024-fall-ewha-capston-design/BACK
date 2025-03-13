@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -12,7 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
 @Configuration
-@EnableWebSocket
+//@EnableWebSocket
 @RequiredArgsConstructor
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -33,10 +34,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
      */
 
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic"); // 클라이언트가 구독할 수 있는 prefix
+        registry.enableSimpleBroker("/topic", "/queue"); // 클라이언트가 구독할 수 있는 prefix
         registry.setApplicationDestinationPrefixes("/app"); // 클라이언트가 서버로 보낼 때 사용하는 prefix
     }
 
@@ -49,6 +49,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                //.withSockJS()
         ;
     }
+
+
 
     /*
     @Override
