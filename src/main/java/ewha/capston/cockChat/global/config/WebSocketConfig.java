@@ -17,6 +17,7 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    /*
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메시지 브로커에 사용할 TaskScheduler 추가 (하트비트 설정을 위해 필수)
@@ -30,25 +31,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
     }
 
-    /*
+     */
+
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic")// 클라이언트가 구독할 수 있는 prefix
-                .setHeartbeatValue(new long[]{10000, 10000});
-              //  .setHeartbeatValue(new long[]{10000, 10000})
-        ;  // 하트비트 설정
+        registry.enableSimpleBroker("/topic"); // 클라이언트가 구독할 수 있는 prefix
         registry.setApplicationDestinationPrefixes("/app"); // 클라이언트가 서버로 보낼 때 사용하는 prefix
     }
 
-
-     */
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
-               // .withSockJS()
+                .setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
+               //.withSockJS()
         ;
     }
 
