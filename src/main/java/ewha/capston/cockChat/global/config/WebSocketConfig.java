@@ -45,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
+                //.setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
                //.withSockJS()
         ;
     }
