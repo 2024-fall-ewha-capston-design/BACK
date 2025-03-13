@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -18,10 +19,29 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic"); // 클라이언트가 구독할 수 있는 prefix
+        // 메시지 브로커에 사용할 TaskScheduler 추가 (하트비트 설정을 위해 필수)
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        taskScheduler.setPoolSize(1);
+        taskScheduler.initialize();
+
+        registry.enableSimpleBroker("/topic")
+                .setHeartbeatValue(new long[]{10000, 10000})  // 10초 하트비트
+                .setTaskScheduler(taskScheduler);  // 하트비트 스케줄링
+        registry.setApplicationDestinationPrefixes("/app");
+    }
+
+    /*
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic")// 클라이언트가 구독할 수 있는 prefix
+                .setHeartbeatValue(new long[]{10000, 10000});
+              //  .setHeartbeatValue(new long[]{10000, 10000})
+        ;  // 하트비트 설정
         registry.setApplicationDestinationPrefixes("/app"); // 클라이언트가 서버로 보낼 때 사용하는 prefix
     }
 
+
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
@@ -29,7 +49,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
                 .withSockJS();
     }
-
 
 /*
     @Override
