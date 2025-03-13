@@ -56,7 +56,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOrigins("https://chatcipe.o-r.kr", "https://your-vercel-app.vercel.app", "https://chatcipe.netlify.app") // Vercel 도메인 추가
+                .setAllowedOrigins("https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app") // Vercel 도메인 추가
                 .withSockJS()
                 .setSessionCookieNeeded(false) // 쿠키 세션 필요 없음
                 .setHeartbeatTime(25000) // 25초마다 하트비트 전송
