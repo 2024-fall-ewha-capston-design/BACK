@@ -21,12 +21,17 @@ public class Participant {
     @Column
     private Boolean isOwner;
 
+    /*
+
+    테이블 분리하여 관리
+
     @Column
     private String positiveKeywords;
 
     @Column
     private String negativeKeywords;
 
+     */
     @Column
     private String roomNickname;
 
@@ -54,11 +59,15 @@ public class Participant {
         this.member = member;
     }
 
+
     /* 키워드 설정 업데이트 */
+    /*
     public void updateSettings(String positiveKeywords, String negativeKeywords){
         this.positiveKeywords = positiveKeywords;
         this.negativeKeywords = negativeKeywords;
     }
+    */
+
 
     /* 방장 권한 업데이트 */
     public void updateIsOwner(Boolean isOwner){
