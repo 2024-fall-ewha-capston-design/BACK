@@ -1,16 +1,18 @@
 package ewha.capston.cockChat.global.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+
+import java.util.Map;
 
 @Configuration
 //@EnableWebSocket
@@ -46,10 +48,28 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
                 .setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app")
+                .addInterceptors(new HttpSessionHandshakeInterceptor() {
+                    @Override
+                    public boolean beforeHandshake(
+                            ServerHttpRequest request, ServerHttpResponse response,
+                            org.springframework.web.socket.WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+                        System.out.println("🔍 WebSocket Request Headers: " + request.getHeaders());
+                        System.out.println("🔍 Upgrade Header: " + request.getHeaders().getFirst("Upgrade"));
+                        System.out.println("🔍 Connection Header: " + request.getHeaders().getFirst("Connection"));
+                        return true;
+                    }
+
+                    @Override
+                    public void afterHandshake(
+                            ServerHttpRequest request, ServerHttpResponse response,
+                            org.springframework.web.socket.WebSocketHandler wsHandler, Exception exception) {
+                        System.out.println("✅ WebSocket Handshake 완료!");
+                    }
+                });
                 //.setAllowedOriginPatterns("*")
                 //.setAllowedOrigins("http://localhost:63342","https://chatcipe.o-r.kr", "https://chatcipe.vercel.app", "https://chatcipe.netlify.app")
                //.withSockJS()
-        ;
+
     }
 
 
