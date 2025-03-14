@@ -18,7 +18,8 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
                 .simpDestMatchers("/ws-chat/**").permitAll() // WebSocket 엔드포인트는 인증 없이 접근 가능
-                .anyMessage().authenticated(); // 그 외의 모든 메시지는 인증 필요
+                //.anyMessage().authenticated()
+        ; // 그 외의 모든 메시지는 인증 필요
     }
 }
 
