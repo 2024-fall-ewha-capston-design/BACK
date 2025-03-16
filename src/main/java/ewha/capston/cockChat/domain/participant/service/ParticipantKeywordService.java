@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -58,5 +59,16 @@ public class ParticipantKeywordService {
         );
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(KeywordResponseDto.of(negativeKeyword.getNegativeKeywordId(),negativeKeyword.getContent()));
+    }
+
+    /* 긍정 키워드 목록 조회 */
+    public ResponseEntity<List<KeywordResponseDto>> getPositiveKeywordListByParticipant(Member member, Long participantId) {
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
+        if(participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+        List<ParticipantPositiveKeyword> positiveKeywordList = positiveKeywordRepository.findAllByParticipant(participant);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(positiveKeywordList.stream().map(positiveKeyword->KeywordResponseDto.of(positiveKeyword.getPositiveKeywordId(), positiveKeyword.getContent())).collect(Collectors.toList()));
     }
 }
