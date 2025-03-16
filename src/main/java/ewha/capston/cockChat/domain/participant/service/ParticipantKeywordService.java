@@ -71,4 +71,15 @@ public class ParticipantKeywordService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(positiveKeywordList.stream().map(positiveKeyword->KeywordResponseDto.of(positiveKeyword.getPositiveKeywordId(), positiveKeyword.getContent())).collect(Collectors.toList()));
     }
+
+    /* 부정 키워드 목록 조회 */
+    public ResponseEntity<List<KeywordResponseDto>> getNegativeKeywordListByParticipant(Member member, Long participantId) {
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
+        if(participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+        List<ParticipantNegativeKeyword> negativeKeywordList = negativeKeywordRepository.findAllByParticipant(participant);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(negativeKeywordList.stream().map(negativeKeyword->KeywordResponseDto.of(negativeKeyword.getNegativeKeywordId(), negativeKeyword.getContent())).collect(Collectors.toList()));
+    }
 }

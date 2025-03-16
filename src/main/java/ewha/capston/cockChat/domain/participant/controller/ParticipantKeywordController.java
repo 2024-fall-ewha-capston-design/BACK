@@ -35,4 +35,10 @@ public class ParticipantKeywordController {
     public ResponseEntity<List<KeywordResponseDto>> getPositiveKeywordListByParticipant(@AuthUser Member member, @PathVariable(name = "participantId") Long participantId){
         return participantKeywordService.getPositiveKeywordListByParticipant(member, participantId);
     }
+
+    /* 부정 키워드 목록 조회 */
+    @GetMapping("/participants/{participantId}/negative-keywords")
+    public ResponseEntity<List<KeywordResponseDto>> getNegativeKeywordListByParticipant(@AuthUser Member member,  @PathVariable(name = "participantId") Long participantId){
+        return participantKeywordService.getNegativeKeywordListByParticipant(member, participantId);
+    }
 }
