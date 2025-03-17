@@ -47,4 +47,10 @@ public class ParticipantKeywordController {
     public ResponseEntity deletePositiveKeyword(@AuthUser Member member, @PathVariable(name = "participantId") Long participantId, @PathVariable(name = "keywordId") Long keywordId){
         return participantKeywordService.deletePositiveKeyword(member, participantId, keywordId);
     }
+
+    /* 부정 키워드 삭제 */
+    @DeleteMapping("/participants/{participantId}/negative-keywords/{keywordId}")
+    public ResponseEntity deleteNegativeKeyword(@AuthUser Member member, @PathVariable(name = "participantId") Long participantId, @PathVariable(name = "keywordId") Long keywordId){
+        return participantKeywordService.deleteNegativeKeyword(member, participantId, keywordId);
+    }
 }
