@@ -82,4 +82,18 @@ public class ParticipantKeywordService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(negativeKeywordList.stream().map(negativeKeyword->KeywordResponseDto.of(negativeKeyword.getNegativeKeywordId(), negativeKeyword.getContent())).collect(Collectors.toList()));
     }
+
+    /* 긍정 키워드 삭제 */
+    public ResponseEntity deletePositiveKeyword(Member member, Long participantId, Long keywordId) {
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
+        if(participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+        ParticipantPositiveKeyword positiveKeyword = positiveKeywordRepository.findById(keywordId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_KEYWORD));
+        if(!positiveKeyword.getParticipant().equals(participant)) throw new CustomException(ErrorCode.NO_PERMISSION);
+
+        positiveKeywordRepository.delete(positiveKeyword);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
