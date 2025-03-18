@@ -27,14 +27,11 @@ public class ChatRoomParticipantController {
         return chatRoomParticipantService.getChatRoomsByMember(member);
     }
 
-    /* 채팅방 설정 */
-    /*
-    @PutMapping("/{chatRoomId}/settings")
-    public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId
-    , @RequestBody ChatRoomSettingRequestDto requestDto){
-        return chatRoomParticipantService.updateSettings(member,chatRoomId,requestDto);
+    /* 채팅방에 참여할 participant 조회 */
+    @GetMapping("/{chatRoomId}/participants")
+    public ResponseEntity<ParticipantResponseDto> getParticipantByMemberAndChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
+        return chatRoomParticipantService.getParticipantByMemberAndChatRoom(member,chatRoomId);
     }
-     */
 
     /* 채팅방 방장 변경 */
     @PutMapping("/{chatRoomId}/owner")
