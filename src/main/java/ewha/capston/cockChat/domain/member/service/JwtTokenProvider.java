@@ -125,4 +125,13 @@ public class JwtTokenProvider {
         return nickname;
     }
 
+    /* 토큰으로부터 memberId 획득 */
+    public Long getMemberIdFromToken(String accessToken){
+        String email = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(accessToken).getBody().getSubject();
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new CustomException(ErrorCode.NO_MEMBER_EXIST));
+        Long memberId = member.getMemberId();
+        return memberId;
+    }
+
 }

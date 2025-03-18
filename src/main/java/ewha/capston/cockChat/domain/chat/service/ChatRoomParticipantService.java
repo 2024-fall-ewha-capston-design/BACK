@@ -48,6 +48,17 @@ public class ChatRoomParticipantService {
     }
 
 
+    /* 채팅방에 참여할 participant 조회*/
+    public ResponseEntity<ParticipantResponseDto> getParticipantByMemberAndChatRoom(Member member, Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
+        Participant participant = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_A_PARTICIPANT));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ParticipantResponseDto.of(participant));
+    }
+
+
     /* 참여 중인 채팅방에서 탈퇴 */
     public ResponseEntity<Void> removeParticipantFromChatRoom(Member member, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
