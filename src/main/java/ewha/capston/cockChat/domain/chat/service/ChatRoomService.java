@@ -2,9 +2,9 @@ package ewha.capston.cockChat.domain.chat.service;
 
 import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomInfoDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatRoomInfoDto;
+import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatRoomRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
@@ -132,6 +132,9 @@ public class ChatRoomService {
 
     /* chatRoomResponseDto 생성 */
     public ChatRoomResponseDto makeChatRoomResponseDto(ChatRoom chatRoom){
-        return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),mongoChatRepository.findTopByChatroomIdOrderByCreatedDateDesc(chatRoom.getRoomId()));
+        Chat latestChat =  mongoChatRepository.findTopByChatroomIdOrderByCreatedDateDesc(chatRoom.getRoomId());
+        Participant sender = participantRepository.findById(latestChat.getParticipantId())
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),latestChat,sender);
     }
 }

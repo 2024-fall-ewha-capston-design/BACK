@@ -1,4 +1,4 @@
-package ewha.capston.cockChat.domain.chat.dto;
+package ewha.capston.cockChat.domain.chat.dto.reqeust;
 
 
 import lombok.AccessLevel;

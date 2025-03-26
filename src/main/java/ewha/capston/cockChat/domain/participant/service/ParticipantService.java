@@ -49,7 +49,6 @@ public class ParticipantService {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ParticipantResponseDto.of(participant));
-
     }
 
     /* 익명 채팅방 신규 입장 */

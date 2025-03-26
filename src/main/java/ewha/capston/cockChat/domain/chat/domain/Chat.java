@@ -32,5 +32,4 @@ public class Chat extends BaseTimeEntity{
         this.message = message;
         this.participantId = participantId;
     }
-
 }
