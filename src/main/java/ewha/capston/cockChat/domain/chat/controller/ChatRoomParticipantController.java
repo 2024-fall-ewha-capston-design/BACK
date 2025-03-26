@@ -1,8 +1,6 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomSettingResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatRoomParticipantService;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.dto.OwnerRequestDto;

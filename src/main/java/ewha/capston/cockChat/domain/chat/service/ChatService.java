@@ -2,14 +2,10 @@ package ewha.capston.cockChat.domain.chat.service;
 
 import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
-import ewha.capston.cockChat.domain.chat.domain.MessageType;
-import ewha.capston.cockChat.domain.chat.dto.ChatMessageRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatResponseDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatMessageRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
-import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
@@ -22,8 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,10 +35,13 @@ public class ChatService {
     private final SimpMessagingTemplate messagingTemplate;
 
     /* mongoDB 연결 확인 */
+    /*
     public void mongoDBConnectionTest(){
         Chat chat = new Chat(1L, 1L, "test", MessageType.CHAT);
         mongoChatRepository.save(chat);
     }
+
+     */
 
 
     /* 메시지 보내기 */
@@ -67,14 +67,32 @@ public class ChatService {
                 .build()
         );
 
+        ChatResponseDto responseDto = ChatResponseDto.of(chat,sender);
+
         /* 메시지 송신 */
-        messagingTemplate.convertAndSend("/topic/public/" + roomId, chat);
+        messagingTemplate.convertAndSend("/topic/public/" + roomId, responseDto);
     }
 
     /* 채팅 내역 조회 */
     public ResponseEntity<List<ChatResponseDto>> getChatMessageList(Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
         List<Chat> chatList = mongoChatRepository.findAllByChatroomIdOrderByCreatedDateAsc(chatRoomId);
+
+        List<Participant> senderList = participantRepository.findAllByChatRoom(chatRoom);
+        Map<Long, Participant> senderMap = senderList.stream().collect(Collectors.toMap(Participant::getParticipantId, Function.identity()));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(chatList.stream().map(
+                        chat -> {
+                            Participant sender = senderMap.get(chat.getParticipantId());
+                            return ChatResponseDto.of(chat,sender);
+                        }).collect(Collectors.toList()));
+
+        /*
         return ResponseEntity.status(HttpStatus.OK)
                 .body(chatList.stream().map(ChatResponseDto::of).collect(Collectors.toList()));
+
+         */
     }
 }

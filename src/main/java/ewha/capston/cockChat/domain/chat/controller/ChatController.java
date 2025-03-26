@@ -1,15 +1,13 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
-import ewha.capston.cockChat.domain.chat.dto.ChatMessageRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatMessageRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

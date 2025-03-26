@@ -1,8 +1,8 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomInfoDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomRequestDto;
-import ewha.capston.cockChat.domain.chat.dto.ChatRoomResponseDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatRoomInfoDto;
+import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatRoomRequestDto;
+import ewha.capston.cockChat.domain.chat.dto.response.ChatRoomResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatRoomService;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
 import ewha.capston.cockChat.domain.member.domain.Member;
@@ -62,10 +62,14 @@ public class ChatRoomController {
     }
 
     /* mongoDB 테스트 */
+
+    /*
     @PostMapping("/chat/test")
     public ResponseEntity testMongo(){
         chatService.mongoDBConnectionTest();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("성공");
     }
+
+     */
 }
