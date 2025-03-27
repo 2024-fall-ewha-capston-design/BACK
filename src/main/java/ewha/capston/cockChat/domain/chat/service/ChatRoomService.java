@@ -133,8 +133,14 @@ public class ChatRoomService {
     /* chatRoomResponseDto 생성 */
     public ChatRoomResponseDto makeChatRoomResponseDto(ChatRoom chatRoom){
         Chat latestChat =  mongoChatRepository.findTopByChatroomIdOrderByCreatedDateDesc(chatRoom.getRoomId());
-        Participant sender = participantRepository.findById(latestChat.getParticipantId())
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
-        return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),latestChat,sender);
+        if(latestChat != null){
+            Participant sender = participantRepository.findById(latestChat.getParticipantId())
+                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+            return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),latestChat,sender);
+        }
+        else{
+            return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),null,null);
+        }
+
     }
 }
