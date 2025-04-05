@@ -19,10 +19,14 @@ public class Notification {
 
     private Long participantId;
 
+    private boolean isRead;
+
+
     @Builder
-    public Notification(String chatId, Long keywordId, Long participantId){
+    public Notification(String chatId, Long keywordId, Long participantId, boolean isRead){
         this.chatId =chatId;
         this.keywordId = keywordId;
         this.participantId = participantId;
+        this.isRead = isRead;
     }
 }

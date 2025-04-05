@@ -6,6 +6,7 @@ import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatMessageRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.response.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
+import ewha.capston.cockChat.domain.notification.service.NotificationService;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
@@ -13,6 +14,7 @@ import ewha.capston.cockChat.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -33,6 +35,8 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ParticipantRepository participantRepository;
     private final SimpMessagingTemplate messagingTemplate;
+
+    private final NotificationService notificationService;
 
     /* mongoDB 연결 확인 */
     /*
@@ -71,6 +75,9 @@ public class ChatService {
 
         /* 메시지 송신 */
         messagingTemplate.convertAndSend("/topic/public/" + roomId, responseDto);
+
+        /* 메시지 개수 증가 및 OpenAI 분석 트리거 */
+        notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
     }
 
     /* 채팅 내역 조회 */
