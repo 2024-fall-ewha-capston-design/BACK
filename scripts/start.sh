@@ -1,17 +1,33 @@
 #!/usr/bin/env bash
+
 PROJECT_ROOT="/home/ubuntu/happyCoder"
 JAR_FILE="$PROJECT_ROOT/cockChat-webapp.jar"
+FASTAPI_DIR="$PROJECT_ROOT/fastAPI"
+FASTAPI_LOG="$PROJECT_ROOT/fastapi.log"
 
 APP_LOG="$PROJECT_ROOT/application.log"
 ERROR_LOG="$PROJECT_ROOT/error.log"
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
-# build한 파일 복사
-echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
+
+echo "$TIME_NOW > 배포 시작" >> $DEPLOY_LOG
+
+# ✅ Spring Boot 실행
 cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
-# jar 파일 실행
-echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
 nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
-CURRENT_PID=$(pgrep -f $JAR_FILE)
-echo "$TIME_NOW > 실행된 프로세스의 아이디는 $CURRENT_PID 입니다." >> $DEPLOY_LOG
+
+# ✅ FastAPI 실행
+cd $FASTAPI_DIR
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+FASTAPI_PID=$(pgrep -f "uvicorn main:app")
+if [ -n "$FASTAPI_PID" ]; then
+  kill -15 "$FASTAPI_PID"
+  sleep 3
+fi
+
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 > $FASTAPI_LOG 2>&1 &

@@ -19,41 +19,54 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout
+      - name: ✅ Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: ☕ Set up JDK 17 (for Spring Boot)
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Make application.yml
+      - name: 🛠️ Make application.yml
         run: |
           mkdir -p ./src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
 
-      - name: Build with Gradle
+      - name: 🏗️ Build Spring Boot with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew build -x test
 
-      - name: Configure AWS credentials
+      - name: 🐍 Prepare FastAPI dependencies (optional, mainly for local test)
+        run: |
+          cd fastAPI
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt || true
+          cd ..
+
+      - name: 🔑 Create .env file for FastAPI
+        run: |
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > ./fastAPI/.env
+
+      - name: ☁️ Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Upload to AWS S3
+      - name: 📦 Upload to AWS S3
         run: |
+          zip -r $GITHUB_SHA.zip . -x "*.git*" "*venv/*"
           aws deploy push \
             --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
             --ignore-hidden-files \
             --s3-location s3://${{ env.S3_BUCKET_NAME }}/$GITHUB_SHA.zip \
             --source .
 
-      - name: Deploy to AWS EC2 from S3
+      - name: 🚀 Deploy to AWS EC2 from S3
         run: |
           aws deploy create-deployment \
             --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
