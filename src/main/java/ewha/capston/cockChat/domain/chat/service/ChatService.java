@@ -76,8 +76,8 @@ public class ChatService {
         /* 메시지 송신 */
         messagingTemplate.convertAndSend("/topic/public/" + roomId, responseDto);
 
-        /* 메시지 개수 증가 및 OpenAI 분석 트리거 */
-        notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
+        /* 메시지 개수 증가 및 OpenAI 분석 트리거  : 일단 주석 처리 */
+        //notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
     }
 
     /* 채팅 내역 조회 */
