@@ -30,4 +30,5 @@ if [ -n "$FASTAPI_PID" ]; then
   sleep 3
 fi
 
-nohup uvicorn main:app --host 0.0.0.0 --port 8000 > $FASTAPI_LOG 2>&1 &
+#nohup uvicorn main:app --host 0.0.0.0 --port 8000 > $FASTAPI_LOG 2>&1 &
+nohup ./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 > $FASTAPI_LOG 2>&1 &
