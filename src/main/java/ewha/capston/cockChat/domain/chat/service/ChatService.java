@@ -1,5 +1,6 @@
 package ewha.capston.cockChat.domain.chat.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatMessageRequestDto;
@@ -49,7 +50,7 @@ public class ChatService {
 
 
     /* 메시지 보내기 */
-    public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) {
+    public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) throws JsonProcessingException {
 
         /* 채팅 내용으로 공백이 들어온 경우, 예외 발생 */
         if(requestDto.getContent().isBlank()) throw new CustomException(ErrorCode.INVALID_MESSAGE_CONTENT);
@@ -77,7 +78,7 @@ public class ChatService {
         messagingTemplate.convertAndSend("/topic/public/" + roomId, responseDto);
 
         /* 메시지 개수 증가 및 OpenAI 분석 트리거  : 일단 주석 처리 */
-        //notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
+        notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
     }
 
     /* 채팅 내역 조회 */

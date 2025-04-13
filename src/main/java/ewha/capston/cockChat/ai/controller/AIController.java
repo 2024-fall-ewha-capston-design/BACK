@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AIController {
 
-    private final FastApiService fastApiService;
+    //private final FastApiService fastApiService;
 
+    /*
     @PostMapping("/filter-negative-chat")
     public ResponseEntity<Object> filterNegativeChat(@RequestBody NegativeChatRequestDto requestDto){
         return fastApiService.filterNegativeChat(requestDto);
     }
+
+     */
 
     /*
     @GetMapping("/test-call")

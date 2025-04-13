@@ -1,5 +1,6 @@
 package ewha.capston.cockChat.domain.notification.domain;
 
+import ewha.capston.cockChat.global.BaseTimeEntity;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @NoArgsConstructor
 @Document(collection = "notifications")
-public class Notification {
+public class Notification extends BaseTimeEntity {
     @Id
     private String id;
 
