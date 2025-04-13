@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class ChatResponseDto {
     private Long roomId;
     private Long senderId;
+    private String chatId;
     private String senderNickname;
     private String senderImgUrl;
     private MessageType type;
@@ -26,6 +27,7 @@ public class ChatResponseDto {
         return ChatResponseDto.builder()
                 .roomId(chat.getChatroomId())
                 .senderId(chat.getParticipantId())
+                .chatId(chat.getId())
                 .senderNickname(participant.getRoomNickname())
                 .senderImgUrl(participant.getParticipantImgUrl())
                 .type(chat.getMessageType())

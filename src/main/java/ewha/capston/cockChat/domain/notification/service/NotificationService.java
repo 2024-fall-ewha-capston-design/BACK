@@ -151,11 +151,25 @@ public class NotificationService {
                 .body(notificationList.stream()
                         .map(notification -> {
                             Chat chat = chatRepository.findById(notification.getChatId()).orElseThrow();
+                            ChatRoom chatRoom = chatRoomRepository.findById(chat.getChatroomId())
+                                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
                             ParticipantPositiveKeyword keyword = positiveKeywordRepository.findById(notification.getKeywordId()).orElseThrow();
                             boolean isRead = notification.isRead(); // 또는 다른 로직
-                            return NotificationResponseDto.of(notification, chat, keyword, isRead);
+                            return NotificationResponseDto.of(notification, chat, chatRoom, keyword, isRead);
                         })
                         .collect(Collectors.toList()));
     }
 
+    /* 알림 읽음 처리 */
+    public ResponseEntity<Object> markNotificationAsRead(Member member, String notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_NOTIFICATION));
+        Participant participant = participantRepository.findById(notification.getParticipantId())
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.NO_PERMISSION);
+        notificationRepository.delete(notification);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(null);
+    }
 }
