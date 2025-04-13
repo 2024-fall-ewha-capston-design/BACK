@@ -1,5 +1,6 @@
 package ewha.capston.cockChat.domain.chat.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ewha.capston.cockChat.domain.chat.dto.reqeust.ChatMessageRequestDto;
 import ewha.capston.cockChat.domain.chat.dto.response.ChatResponseDto;
 import ewha.capston.cockChat.domain.chat.service.ChatService;
@@ -23,7 +24,7 @@ public class ChatController {
 
     /* 채팅 보내기 */
     @MessageMapping("/chat/send")
-    public void sendMessage(@Payload  ChatMessageRequestDto requestDto){
+    public void sendMessage(@Payload  ChatMessageRequestDto requestDto) throws JsonProcessingException {
         log.info("Received message request: {}", requestDto);
         chatService.sendMessage(requestDto.getRoomId(), requestDto);
     }

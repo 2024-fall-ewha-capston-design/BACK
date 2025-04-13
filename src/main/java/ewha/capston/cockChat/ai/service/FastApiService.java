@@ -1,6 +1,7 @@
 package ewha.capston.cockChat.ai.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ewha.capston.cockChat.ai.dto.ChatAnalysisRequestDto;
 import ewha.capston.cockChat.ai.dto.ChatAnalysisResult;
@@ -44,7 +45,6 @@ public class FastApiService {
     // 기본 생성자 (필요한 경우 추가)
     public FastApiService() {
         this.webClient = WebClient.create("http://127.0.0.1:8000");
-        //this.webClient = WebClient.create(); -> connection refused
     }
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -62,6 +62,7 @@ public class FastApiService {
                     .bodyValue(requestDto)
                     .retrieve()
                     .bodyToMono(Object.class)
+                    .timeout(Duration.ofSeconds(10))
                     .block();
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(object);
@@ -75,7 +76,10 @@ public class FastApiService {
     }
 
     /* 사용자 맞춤 알림 생성 */
-    public void analyzeChatAndMakeNotification(ChatAnalysisRequestDto requestDto) {
+    public void analyzeChatAndMakeNotification(ChatAnalysisRequestDto requestDto) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonBody = objectMapper.writeValueAsString(requestDto);
+        System.out.println("📤 보낼 JSON:\n" + jsonBody);
         try {
             // 1️⃣ FastAPI로 요청 전송
             List<ChatAnalysisResult> analysisResults = webClient.post()
@@ -84,7 +88,7 @@ public class FastApiService {
                     .bodyValue(requestDto)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<List<ChatAnalysisResult>>() {})
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(10))
                     .block();
 
             //System.out.println("📌 분석 결과: " + analysisResults);
