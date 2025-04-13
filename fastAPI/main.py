@@ -1,12 +1,11 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from intoGPT import analyze_chat
-from typing import List, Dict
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-
-# ✅ 예외 핸들러 추가: FastAPI에서 422 오류 이유를 출력
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from pydantic import BaseModel, Field
+from typing import List, Dict
+import json
+
+from intoGPT import perform_analysis  # 너의 GPT 호출 함수
 
 app = FastAPI()
 
@@ -17,46 +16,36 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content={"detail": exc.errors()},
     )
 
-class ChatAnalysisRequest(BaseModel):
+
+class Keyword(BaseModel):
+    keyword_id: str
+    content: str
+
+class ChatRequest(BaseModel):
     messages: List[str]
-    participant_keywords: Dict[str, List[str]]  # JSON은 Key를 String으로 처리하므로 수정 필요
+    participant_keywords: Dict[str, List[Keyword]]
 
 
+
+
+# 🔹 응답 예시 (chat_id, participant_id, keyword_id 조합 리스트)
 @app.post("/analyze_chat")
-async def analyze_chat_endpoint(request: Request):
-    import json
-    from fastapi.responses import JSONResponse
-
+async def analyze_chat(request: ChatRequest):
     try:
-        body = await request.json()  # ✅ 원본 JSON 데이터 확인
-        print("📩 FastAPI가 받은 JSON 데이터:", json.dumps(body, indent=4, ensure_ascii=False))
+        print("✅ Parsed request:", request)
 
-        # 🚀 JSON 키 변환: participantKeywords → participant_keywords
-        if "participantKeywords" in body:
-            body["participant_keywords"] = body.pop("participantKeywords")
+        # participant_keywords 변환
+        keywords_dict = {
+            pid: [k.dict() for k in kws] for pid, kws in request.participant_keywords.items()
+        }
+        print("🔵 변환된 participant_keywords:", keywords_dict)
 
-        # ✅ 요청 데이터 Pydantic 모델 변환
-        chat_request = ChatAnalysisRequest(**body)
+        result = perform_analysis(request.messages, keywords_dict)
+        print("🟣 분석 결과:", result)
 
-        # ✅ Dict Key를 String으로 변환
-        participant_keywords = {str(k): v for k, v in chat_request.participant_keywords.items()}
-
-        # 🔥 채팅 분석 실행
-        result = analyze_chat(chat_request.messages, participant_keywords)
-
-        # ✅ 항상 JSON 배열을 반환하도록 보장
-        if not isinstance(result, list):
-            print("⚠️ 예상과 다른 데이터 타입 감지 → 빈 리스트 반환")
-            result = []
-
-        # ✅ 최종 응답 데이터를 Dict Key를 String으로 변환
-        result = [{str(k): v for k, v in item.items()} for item in result]
-
-        print(f"✅ FastAPI 분석 결과 반환: {result}")
-
-        # 🔹 JSON 배열 보장
-        return JSONResponse(content=result)
+        #return {"result": result}
+        return result
 
     except Exception as e:
-        print("🔥 FastAPI 500 에러 발생:")
-        return JSONResponse(status_code=500, content=[])
+        print("❌ 예외 발생:", str(e))
+        return {"error": str(e)}
