@@ -12,7 +12,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_API_KEY"] = openai_api_key
 
 # 🔹 LLM 세팅
-chat_model = ChatOpenAI(model="gpt-4-0125-preview", temperature=0)
+chat_model = ChatOpenAI(model="gpt-4-1106-preview", temperature=0)
 
 # 🔹 JSON 파서 (LLM 응답을 JSON으로 파싱)
 parser = JsonOutputParser()
