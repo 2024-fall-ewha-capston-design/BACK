@@ -2,7 +2,7 @@ package ewha.capston.cockChat.global.config.webSocket;
 
 import ewha.capston.cockChat.domain.member.service.JwtTokenProvider;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
@@ -10,17 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import java.util.Map;
-
-import static org.hibernate.boot.model.source.internal.hbm.Helper.getValue;
 
 @Component
 @RequiredArgsConstructor

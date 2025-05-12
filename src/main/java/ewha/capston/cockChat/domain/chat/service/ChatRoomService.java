@@ -9,7 +9,7 @@ import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;

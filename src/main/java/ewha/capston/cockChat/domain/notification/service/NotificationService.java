@@ -183,6 +183,7 @@ public class NotificationService {
     }
     // redis 카운트 값 초기화하 는 부분 필요함.
 
+
     /* 알림 목록 조회 */
     public ResponseEntity<List<NotificationResponseDto>> getMemberNotificationList(Member member) {
         List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
