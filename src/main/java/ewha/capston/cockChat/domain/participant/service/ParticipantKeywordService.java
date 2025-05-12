@@ -4,8 +4,10 @@ import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.domain.ParticipantNegativeKeyword;
 import ewha.capston.cockChat.domain.participant.domain.ParticipantPositiveKeyword;
-import ewha.capston.cockChat.domain.participant.dto.KeywordInfoDto;
-import ewha.capston.cockChat.domain.participant.dto.KeywordResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.request.NegativeKeywordRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.request.PositiveKeywordRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.response.NegativeKeywordResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.response.PositiveKeywordResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantNegativeKeywordRepository;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantPositiveKeywordRepository;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
@@ -30,7 +32,7 @@ public class ParticipantKeywordService {
     private final ParticipantNegativeKeywordRepository negativeKeywordRepository;
 
     /* 긍정 키워드 설정 */
-    public ResponseEntity<KeywordResponseDto> createPositiveKeyword(Member member, Long participantId, KeywordInfoDto requestDto) {
+    public ResponseEntity<PositiveKeywordResponseDto> createPositiveKeyword(Member member, Long participantId, PositiveKeywordRequestDto requestDto) {
         Participant participant = participantRepository.findById(participantId)
                 .orElseThrow(()-> new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
@@ -42,11 +44,11 @@ public class ParticipantKeywordService {
                         .build()
         );
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(KeywordResponseDto.of(positiveKeyword.getPositiveKeywordId(), positiveKeyword.getContent()));
+                .body(PositiveKeywordResponseDto.of(positiveKeyword));
     }
 
     /* 부정 키워드 설정 */
-    public ResponseEntity<KeywordResponseDto> createNegativeKeyword(Member member, Long participantId, KeywordInfoDto requestDto) {
+    public ResponseEntity<NegativeKeywordResponseDto> createNegativeKeyword(Member member, Long participantId, NegativeKeywordRequestDto requestDto) {
         Participant participant = participantRepository.findById(participantId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
@@ -54,33 +56,35 @@ public class ParticipantKeywordService {
         ParticipantNegativeKeyword negativeKeyword = negativeKeywordRepository.save(
                 ParticipantNegativeKeyword.builder()
                         .participant(participant)
+                        .penaltyScore(requestDto.getPenaltyScore())
                         .content(requestDto.getKeyword())
                         .build()
         );
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(KeywordResponseDto.of(negativeKeyword.getNegativeKeywordId(),negativeKeyword.getContent()));
+                .body(NegativeKeywordResponseDto.of(negativeKeyword));
     }
 
     /* 긍정 키워드 목록 조회 */
-    public ResponseEntity<List<KeywordResponseDto>> getPositiveKeywordListByParticipant(Member member, Long participantId) {
+    public ResponseEntity<List<PositiveKeywordResponseDto>> getPositiveKeywordListByParticipant(Member member, Long participantId) {
         Participant participant = participantRepository.findById(participantId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
         if(participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
         List<ParticipantPositiveKeyword> positiveKeywordList = positiveKeywordRepository.findAllByParticipant(participant);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(positiveKeywordList.stream().map(positiveKeyword->KeywordResponseDto.of(positiveKeyword.getPositiveKeywordId(), positiveKeyword.getContent())).collect(Collectors.toList()));
+                .body(positiveKeywordList.stream().map(positiveKeyword -> PositiveKeywordResponseDto.of(positiveKeyword)).collect(Collectors.toList()));
     }
 
     /* 부정 키워드 목록 조회 */
-    public ResponseEntity<List<KeywordResponseDto>> getNegativeKeywordListByParticipant(Member member, Long participantId) {
+    public ResponseEntity<List<NegativeKeywordResponseDto>> getNegativeKeywordListByParticipant(Member member, Long participantId) {
         Participant participant = participantRepository.findById(participantId)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
-        if(!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
-        if(participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_PARTICIPANT));
+        if (!participant.getMember().equals(member)) throw new CustomException(ErrorCode.INVALID_MEMBER);
+        if (participant.getIsActive().equals(Boolean.FALSE)) throw new CustomException(ErrorCode.NOT_A_PARTICIPANT);
         List<ParticipantNegativeKeyword> negativeKeywordList = negativeKeywordRepository.findAllByParticipant(participant);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(negativeKeywordList.stream().map(negativeKeyword->KeywordResponseDto.of(negativeKeyword.getNegativeKeywordId(), negativeKeyword.getContent())).collect(Collectors.toList()));
+                .body(negativeKeywordList.stream().map(negativeKeyword -> NegativeKeywordResponseDto.of(negativeKeyword)).collect(Collectors.toList()));
+
     }
 
     /* 긍정 키워드 삭제 */
