@@ -61,16 +61,18 @@ public class NotificationService {
         String messageData = messageId + "|" + senderId + "|" + messageContent;
         redisTemplate.opsForList().rightPush(recentKey, messageData);
 
-        /* 최대 10개 유지 (FIFO) */
-        if (redisTemplate.opsForList().size(recentKey) > 10) {
+        /* 최대 10개 유지 (FIFO) - 일단 이 부분 주석처리해보고 .. */
+        /*
+        if (redisTemplate.opsForList().size(recentKey) > MESSAGE_THRESHOLD) {
             redisTemplate.opsForList().leftPop(recentKey);
         }
+         */
 
         /* 메시지 임계값 도달 시 분석 트리거 */
         if (count != null && count >= MESSAGE_THRESHOLD) {
             List<String> messagesForAnalysis = extractMessagesForAnalysis(roomId);
             analyzeChatAsync(roomId, messagesForAnalysis);
-            redisTemplate.delete(countKey);
+            //redisTemplate.delete(countKey);
 
             //saveFixedMessageSnapshot(roomId);
             //analyzeChatAsync(roomId);
@@ -79,6 +81,46 @@ public class NotificationService {
 
     /* 임계치만큼 메시지 추출 후 삭제 */
     private List<String> extractMessagesForAnalysis(Long roomId) {
+        String recentKey = "chatroom:" + roomId + ":recent_messages";
+
+        // 앞에서부터 N개 메시지 순서 보존하며 가져오기
+        List<String> recentMessages = redisTemplate.opsForList().range(recentKey, 0, MESSAGE_THRESHOLD - 1);
+
+        // 메시지가 부족한 경우 추가 메시지를 가져오기
+        if (recentMessages == null || recentMessages.size() < MESSAGE_THRESHOLD) {
+            recentMessages = new ArrayList<>();
+        }
+
+        // 추출된 메시지 삭제
+        for (int i = 0; i < MESSAGE_THRESHOLD && !recentMessages.isEmpty(); i++) {
+            redisTemplate.opsForList().leftPop(recentKey);
+        }
+
+        log.info("Room {} - 분석용 메시지 {}개 추출 완료", roomId, recentMessages.size());
+        return recentMessages;
+
+        /* gpt1
+        String recentKey = "chatroom:" + roomId + ":recent_messages";
+
+        // 앞에서부터 N개 메시지 순서 보존하며 가져오기
+        List<String> recentMessages = redisTemplate.opsForList().range(recentKey, 0, MESSAGE_THRESHOLD - 1);
+        if (recentMessages == null) recentMessages = new ArrayList<>();
+
+        for (int i = 0; i < MESSAGE_THRESHOLD; i++) {
+            String message = redisTemplate.opsForList().leftPop(recentKey);
+            /*
+            if (message != null) {
+                extractedMessages.add(message);
+            }
+
+        }
+
+        log.info("Room {} - 분석용 메시지 {}개 추출 완료", roomId, recentMessages.size());
+        return recentMessages;
+
+         */
+
+        /* 이게 원래 버전
         String recentKey = "chatroom:" + roomId + ":recent_messages";
 
         List<String> extractedMessages = new ArrayList<>();
@@ -91,6 +133,8 @@ public class NotificationService {
 
         log.info("Room {} - 분석용 메시지 {}개 추출 완료", roomId, extractedMessages.size());
         return extractedMessages;
+
+         */
     }
 
     /* 임계값 초과 시점의 최근 10개 메시지 저장 */
