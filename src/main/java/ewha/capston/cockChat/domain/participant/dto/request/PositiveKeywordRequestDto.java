@@ -1,4 +1,4 @@
-package ewha.capston.cockChat.domain.participant.dto;
+package ewha.capston.cockChat.domain.participant.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KeywordInfoDto {
+public class PositiveKeywordRequestDto {
     private String keyword;
 }

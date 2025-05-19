@@ -8,7 +8,7 @@ import ewha.capston.cockChat.domain.member.service.AuthService;
 import ewha.capston.cockChat.domain.member.service.MemberService;
 import ewha.capston.cockChat.domain.member.dto.request.LoginRequestDto;
 import ewha.capston.cockChat.domain.member.dto.response.LoginResponseDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
 import jakarta.servlet.http.HttpServletRequest;

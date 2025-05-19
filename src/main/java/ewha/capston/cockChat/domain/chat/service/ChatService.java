@@ -38,6 +38,7 @@ public class ChatService {
     private final SimpMessagingTemplate messagingTemplate;
 
     private final NotificationService notificationService;
+    private final ChatAnalysisTriggerService analysisTriggerService;
 
     /* mongoDB 연결 확인 */
     /*
@@ -78,7 +79,8 @@ public class ChatService {
         messagingTemplate.convertAndSend("/topic/public/" + roomId, responseDto);
 
         /* 메시지 개수 증가 및 OpenAI 분석 트리거  : 일단 주석 처리 */
-        notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
+        analysisTriggerService.incrementMessageCount(roomId,chat.getId(), chat.getParticipantId(), requestDto.getContent());
+        //notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
     }
 
     /* 채팅 내역 조회 */
@@ -102,5 +104,11 @@ public class ChatService {
                 .body(chatList.stream().map(ChatResponseDto::of).collect(Collectors.toList()));
 
          */
+    }
+
+    /* id로 채팅 조회 */
+    public Chat findById(String chatId) {
+        return mongoChatRepository.findById(chatId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_CHAT_ID));
     }
 }

@@ -1,4 +1,4 @@
-package ewha.capston.cockChat.domain.participant.dto;
+package ewha.capston.cockChat.domain.participant.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -24,9 +24,13 @@ public class ParticipantNegativeKeyword {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private Long penaltyScore;
+
     @Builder
-    public ParticipantNegativeKeyword(Participant participant, String content){
+    public ParticipantNegativeKeyword(Participant participant, String content, Long penaltyScore){
         this.participant = participant;
         this.content = content;
+        this.penaltyScore = penaltyScore;
     }
 }

@@ -8,7 +8,6 @@ import ewha.capston.cockChat.domain.chat.domain.Chat;
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
 import ewha.capston.cockChat.domain.chat.mongo.MongoChatRepository;
 import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
-import ewha.capston.cockChat.domain.chat.service.ChatRoomService;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.notification.domain.Notification;
 import ewha.capston.cockChat.domain.notification.dto.NotificationResponseDto;
@@ -17,7 +16,6 @@ import ewha.capston.cockChat.domain.participant.domain.Participant;
 import ewha.capston.cockChat.domain.participant.domain.ParticipantPositiveKeyword;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantPositiveKeywordRepository;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
-import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -182,6 +180,7 @@ public class NotificationService {
         redisTemplate.delete("chatroom:" + roomId + ":message_count");
     }
     // redis 카운트 값 초기화하 는 부분 필요함.
+
 
     /* 알림 목록 조회 */
     public ResponseEntity<List<NotificationResponseDto>> getMemberNotificationList(Member member) {

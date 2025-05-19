@@ -1,7 +1,7 @@
 package ewha.capston.cockChat.domain.chat.dto.response;
 
 import ewha.capston.cockChat.domain.chat.domain.ChatRoom;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

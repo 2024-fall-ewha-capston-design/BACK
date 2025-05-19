@@ -5,9 +5,9 @@ import ewha.capston.cockChat.domain.chat.repository.ChatRoomRepository;
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.dto.request.MemberUpdateRequestDto;
 import ewha.capston.cockChat.domain.participant.domain.Participant;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantAnonymousRequestDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantRealRequestDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.request.ParticipantAnonymousRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.request.ParticipantRealRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.repository.ParticipantRepository;
 import ewha.capston.cockChat.global.exception.CustomException;
 import ewha.capston.cockChat.global.exception.ErrorCode;
@@ -114,5 +114,16 @@ public class ParticipantService {
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ParticipantResponseDto.of(participant));
+    }
+
+    /* id로 participant 조회*/
+    public Participant findById(Long participantId) {
+        return participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+    }
+
+    /* 활성 상태의 모든 participant 조회 */
+    public List<Participant> findAllByIsActiveTrue(){
+        return participantRepository.findAllByIsActiveTrue();
     }
 }

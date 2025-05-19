@@ -19,6 +19,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findAllByMemberAndIsActiveTrue(Member member);
 
     List<Participant> findAllByChatRoom(ChatRoom chatRoom);
+    List<Participant> findAllByIsActiveTrue();
 
     List<Participant> findAllByChatRoomAndIsActiveTrue(ChatRoom chatRoom);
 

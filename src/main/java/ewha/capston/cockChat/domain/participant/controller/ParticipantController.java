@@ -2,9 +2,9 @@ package ewha.capston.cockChat.domain.participant.controller;
 
 import ewha.capston.cockChat.domain.member.domain.Member;
 import ewha.capston.cockChat.domain.member.dto.request.MemberUpdateRequestDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantRealRequestDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantAnonymousRequestDto;
-import ewha.capston.cockChat.domain.participant.dto.ParticipantResponseDto;
+import ewha.capston.cockChat.domain.participant.dto.request.ParticipantRealRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.request.ParticipantAnonymousRequestDto;
+import ewha.capston.cockChat.domain.participant.dto.response.ParticipantResponseDto;
 import ewha.capston.cockChat.domain.participant.service.ParticipantService;
 import ewha.capston.cockChat.global.config.auth.AuthUser;
 import lombok.RequiredArgsConstructor;
