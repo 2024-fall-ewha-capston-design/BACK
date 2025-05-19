@@ -115,4 +115,10 @@ public class ParticipantService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ParticipantResponseDto.of(participant));
     }
+
+    /* id로 participant 조회*/
+    public Participant findById(Long participantId) {
+        return participantRepository.findById(participantId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+    }
 }

@@ -114,4 +114,10 @@ public class ParticipantKeywordService {
         negativeKeywordRepository.delete(negativeKeyword);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    /* 부정 키워드 id로 조회 */
+    public ParticipantNegativeKeyword findNegativeKeywordById(Long keywordId) {
+        return negativeKeywordRepository.findById(keywordId)
+                .orElseThrow(null);
+    }
 }

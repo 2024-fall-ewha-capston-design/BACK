@@ -105,4 +105,10 @@ public class ChatService {
 
          */
     }
+
+    /* id로 채팅 조회 */
+    public Chat findById(String chatId) {
+        return mongoChatRepository.findById(chatId)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_CHAT_ID));
+    }
 }

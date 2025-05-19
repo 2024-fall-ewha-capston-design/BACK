@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     /* chat */
     INVALID_MESSAGE_CONTENT(HttpStatus.BAD_REQUEST, "메시지 내용으로 공백이 들어왔습니다."),
+    INVALID_CHAT_ID(HttpStatus.BAD_REQUEST, "잘못된 채팅 Id입니다."),
 
     /* participant */
     INVALID_PARTICIPANT(HttpStatus.BAD_REQUEST,"잘못된 채팅 참여자입니다."),
