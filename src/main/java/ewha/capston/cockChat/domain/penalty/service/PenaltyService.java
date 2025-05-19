@@ -16,8 +16,10 @@ import ewha.capston.cockChat.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,5 +79,12 @@ public class PenaltyService {
         Penalty penalty = null;
         return  penaltyRepository.findByReceiverParticipantAndOffenderParticipant(receiver, offender)
                 .orElse(null);
+    }
+
+    /* 벌점 상위 3명 조회 */
+    public List<Penalty> findTop3ByReceiverId(Long receiverId){
+        // Pageable topThree = (Pageable) PageRequest.of(0, 3);
+        return penaltyRepository.findTop3ByReceiverParticipant_ParticipantIdAndOffenderParticipant_ParticipantIdNotOrderByPenaltyCountDesc(receiverId, receiverId);
+        //return penaltyRepository.findTop3ByReceiverIdOrderByPenaltyCountDescExcludeSelf(receiverId, topThree);
     }
 }

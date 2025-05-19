@@ -121,4 +121,9 @@ public class ParticipantService {
         return participantRepository.findById(participantId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
     }
+
+    /* 활성 상태의 모든 participant 조회 */
+    public List<Participant> findAllByIsActiveTrue(){
+        return participantRepository.findAllByIsActiveTrue();
+    }
 }
