@@ -190,6 +190,16 @@ public class NotificationService {
 
         List<Notification> notificationList = notificationRepository.findByParticipantIdInOrderByCreatedDateDesc(participantIdList);
 
+        // 본인 알림은 제외
+        for(Notification notification : notificationList){
+            Chat chat = chatRepository.findById(notification.getChatId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_CHAT_ID));
+            Participant chatSender = participantRepository.findById(chat.getParticipantId()).orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
+            if(chatSender.getMember().getMemberId().equals(member.getMemberId())){
+                notificationList.remove(notification);
+                notificationRepository.delete(notification);
+            }
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(notificationList.stream()
                         .map(notification -> {

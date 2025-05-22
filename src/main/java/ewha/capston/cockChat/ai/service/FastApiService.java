@@ -153,6 +153,7 @@ public class FastApiService {
                     ))
                     .collect(Collectors.toList());
 
+
             // 4️⃣ MongoDB에 저장
             List<Notification> savedNotifications = mongoNotificationRepository.saveAll(notifications);
             System.out.println("✅ 저장된 알림 개수: " + savedNotifications.size());
