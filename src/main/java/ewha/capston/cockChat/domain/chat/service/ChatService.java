@@ -40,15 +40,6 @@ public class ChatService {
     private final NotificationService notificationService;
     private final ChatAnalysisTriggerService analysisTriggerService;
 
-    /* mongoDB 연결 확인 */
-    /*
-    public void mongoDBConnectionTest(){
-        Chat chat = new Chat(1L, 1L, "test", MessageType.CHAT);
-        mongoChatRepository.save(chat);
-    }
-
-     */
-
 
     /* 메시지 보내기 */
     public void sendMessage(Long roomId, ChatMessageRequestDto requestDto) throws JsonProcessingException {
@@ -80,7 +71,6 @@ public class ChatService {
 
         /* 메시지 개수 증가 및 OpenAI 분석 트리거  : 일단 주석 처리 */
         analysisTriggerService.incrementMessageCount(roomId,chat.getId(), chat.getParticipantId(), requestDto.getContent());
-        //notificationService.incrementMessageCount(roomId, chat.getId() ,chat.getParticipantId(), requestDto.getContent());
     }
 
     /* 채팅 내역 조회 */
@@ -98,12 +88,6 @@ public class ChatService {
                             Participant sender = senderMap.get(chat.getParticipantId());
                             return ChatResponseDto.of(chat,sender);
                         }).collect(Collectors.toList()));
-
-        /*
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(chatList.stream().map(ChatResponseDto::of).collect(Collectors.toList()));
-
-         */
     }
 
     /* id로 채팅 조회 */

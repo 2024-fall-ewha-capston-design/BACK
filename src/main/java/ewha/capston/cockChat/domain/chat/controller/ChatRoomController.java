@@ -60,16 +60,4 @@ public class ChatRoomController {
     public ResponseEntity<Void> removeChatRoom(@AuthUser Member member, @PathVariable(name = "chatRoomId") Long chatRoomId){
         return chatRoomService.removeChatRoom(member,chatRoomId);
     }
-
-    /* mongoDB 테스트 */
-
-    /*
-    @PostMapping("/chat/test")
-    public ResponseEntity testMongo(){
-        chatService.mongoDBConnectionTest();
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("성공");
-    }
-
-     */
 }
