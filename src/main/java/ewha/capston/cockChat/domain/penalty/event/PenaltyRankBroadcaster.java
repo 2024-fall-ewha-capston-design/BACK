@@ -25,7 +25,7 @@ public class PenaltyRankBroadcaster {
     private final ParticipantService participantService;
     private final PenaltyService penaltyService;
 
-    /*
+
     @Scheduled(fixedRate = 3000) // 3초마다 실행
     public void sendPenaltyRankToEachParticipant() {
         List<Participant> participantList = participantService.findAllByIsActiveTrue();
@@ -59,8 +59,4 @@ public class PenaltyRankBroadcaster {
 
 
     }
-
-
-
-     */
 }
