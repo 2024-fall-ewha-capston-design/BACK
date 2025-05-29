@@ -83,8 +83,6 @@ public class ChatAnalysisTriggerService {
 
         log.info("Room {} - 분석용 메시지 {}개 추출 완료", roomId, recentMessages.size());
         return recentMessages;
-
-
     }
 
     @Async
@@ -101,7 +99,7 @@ public class ChatAnalysisTriggerService {
         // 사용자별 키워드 매핑
         Map<String, List<KeywordAnalysisRequestDto>> participantKeywords = participants.stream()
                 .collect(Collectors.toMap(
-                        p -> String.valueOf(p.getParticipantId()), // Long → String
+                        p -> String.valueOf(p.getParticipantId()),
                         p -> positiveKeywordRepository.findAllByParticipant(p).stream()
                                 .map(k -> new KeywordAnalysisRequestDto(String.valueOf(k.getPositiveKeywordId()), k.getContent()))
                                 .collect(Collectors.toList())
@@ -113,10 +111,7 @@ public class ChatAnalysisTriggerService {
         // OpenAI 분석 요청 (FastAPI 서비스 호출) : 사용자 맞춤 알림 생성
         fastApiService.analyzeChatAndMakeNotification(positiveKeywordRequestDto);
 
-
-
-
-        /* 요주으 인물 처리 */
+        /* 요주의 인물 처리 */
         Map<String, List<KeywordAnalysisRequestDto>> participantNegativeKeywords = participants.stream()
                         .collect(Collectors.toMap(
                                 p-> String.valueOf(p.getParticipantId()),
@@ -126,7 +121,6 @@ public class ChatAnalysisTriggerService {
                         ));
         ChatAnalysisRequestDto negativeKeywordRequestDto = new ChatAnalysisRequestDto(messages, participantNegativeKeywords);
         fastApiService.filterNegativeChat(negativeKeywordRequestDto);
-
 
         redisTemplate.delete("chatroom:" + roomId + ":message_count");
     }

@@ -25,6 +25,7 @@ public class PenaltyRankBroadcaster {
     private final ParticipantService participantService;
     private final PenaltyService penaltyService;
 
+    /*
     @Scheduled(fixedRate = 3000) // 3초마다 실행
     public void sendPenaltyRankToEachParticipant() {
         List<Participant> participantList = participantService.findAllByIsActiveTrue();
@@ -33,7 +34,7 @@ public class PenaltyRankBroadcaster {
                 .map(Participant::getParticipantId)
                 .toList());
 
-        /* 활성 상태의 채팅 참여자가 없는 경우 */
+        //활성 상태의 채팅 참여자가 없는 경우
         if(participantList.isEmpty()) return;
 
         for(Participant participant : participantList){
@@ -47,7 +48,7 @@ public class PenaltyRankBroadcaster {
 
             log.info("✅ [PenaltyService] receiverId={}, 결과개수={}", participant.getParticipantId(), penaltyList.size());
 
-            /* 벌점 상위 3명 전달 */
+            //벌점 상위 3명 전달
             messagingTemplate.convertAndSend(
                     "/topic/penalty/" + participant.getParticipantId(),
                     penaltyList
@@ -55,7 +56,11 @@ public class PenaltyRankBroadcaster {
 
 
         }
+
+
     }
 
 
+
+     */
 }

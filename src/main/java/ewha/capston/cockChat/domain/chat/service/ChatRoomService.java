@@ -141,6 +141,5 @@ public class ChatRoomService {
         else{
             return ChatRoomResponseDto.of(chatRoom,participantRepository.countByChatRoom(chatRoom),null,null);
         }
-
     }
 }

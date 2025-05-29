@@ -190,6 +190,42 @@ public class NotificationService {
 
         List<Notification> notificationList = notificationRepository.findByParticipantIdInOrderByCreatedDateDesc(participantIdList);
 
+        List<NotificationResponseDto> responseList = new ArrayList<>();
+
+        for (Notification notification : notificationList) {
+            Optional<Chat> optionalChat = chatRepository.findById(notification.getChatId());
+            if (optionalChat.isEmpty()) {
+                continue; // chat이 없으면 알림 제외
+            }
+
+            Optional<ParticipantPositiveKeyword> optionalKeyword = positiveKeywordRepository.findById(notification.getKeywordId());
+            if (optionalKeyword.isEmpty()) {
+                continue; // keyword가 없으면 알림 제외
+            }
+
+            Chat chat = optionalChat.get();
+            ChatRoom chatRoom = chatRoomRepository.findById(chat.getChatroomId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.INVALID_ROOM)); // 방은 필수로 존재해야 함
+
+            boolean isRead = notification.isRead();
+
+            responseList.add(NotificationResponseDto.of(notification, chat, chatRoom, optionalKeyword.get(), isRead));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+
+
+
+
+    /*
+    public ResponseEntity<List<NotificationResponseDto>> getMemberNotificationList(Member member) {
+        List<Participant> participantList = participantRepository.findAllByMemberAndIsActiveTrue(member);
+        List<Long> participantIdList = participantList.stream().map(Participant::getParticipantId).toList();
+        if(participantIdList.isEmpty()) return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        List<Notification> notificationList = notificationRepository.findByParticipantIdInOrderByCreatedDateDesc(participantIdList);
+
         // 본인 알림은 제외
         /*
         for(Notification notification : notificationList){
@@ -203,6 +239,7 @@ public class NotificationService {
 
          */
 
+        /*
         return ResponseEntity.status(HttpStatus.OK)
                 .body(notificationList.stream()
                         .map(notification -> {
@@ -215,6 +252,8 @@ public class NotificationService {
                         })
                         .collect(Collectors.toList()));
     }
+
+         */
 
     /* 알림 읽음 처리 */
     public ResponseEntity<Object> markNotificationAsRead(Member member, String notificationId) {

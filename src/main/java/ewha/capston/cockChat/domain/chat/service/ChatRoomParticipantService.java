@@ -45,7 +45,7 @@ public class ChatRoomParticipantService {
     }
 
 
-    /* 채팅방에 참여할 participant 조회*/
+    /* 채팅방에 참여한 participant 조회*/
     public ResponseEntity<ParticipantResponseDto> getParticipantByMemberAndChatRoom(Member member, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
@@ -72,20 +72,6 @@ public class ChatRoomParticipantService {
     public void removeParticipantFromChatRoom(Participant participant){
         participant.deactivateParticipant();
     }
-
-    /* 채팅방 환경 설정 수정 */
-    /*
-    public ResponseEntity<ChatRoomSettingResponseDto> updateSettings(Member member, Long chatRoomId, ChatRoomSettingRequestDto requestDto) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_ROOM));
-        Participant participant = participantRepository.findByMemberAndChatRoomAndIsActiveTrue(member,chatRoom)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_PARTICIPANT));
-        participant.updateSettings(requestDto.getPositiveKeywords(), requestDto.getNegativeKeywords());
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ChatRoomSettingResponseDto.of(participant));
-    }
-
-     */
 
     /* 채팅방 방장 변경 */
     public ResponseEntity<ParticipantResponseDto> updateOwner(Member member, Long chatRoomId, OwnerRequestDto requestDto) {
