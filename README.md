@@ -102,6 +102,9 @@ Spring Boot 기반의 단위/통합 테스트 코드가 `src/test/` 경로에 �
 - **OpenAI GPT-4o API** – 분석 로직 내 활용
 - **GitHub Actions + AWS EC2** – CI/CD 환경
 
+<img width="947" height="402" alt="스크린샷 2025-11-14 오전 9 51 45" src="https://github.com/user-attachments/assets/0b2dc36c-9b14-4e1b-802b-2d55f205a7c9" />
+
+
 ---
 
 ## 📂 프로젝트 구조
